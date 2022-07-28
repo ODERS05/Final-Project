@@ -9,11 +9,14 @@ import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
 import kg.itacademy.sewerfactory.entity.Department;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.Sewer;
+import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.exception.DepartmentNotFoundException;
 import kg.itacademy.sewerfactory.exception.OrderNotFoundException;
+import kg.itacademy.sewerfactory.exception.UserNotFoundException;
 import kg.itacademy.sewerfactory.repository.DepartmentRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
 import kg.itacademy.sewerfactory.repository.SewerRepository;
+import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.service.SewerService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,16 +35,20 @@ public class SewerServiceImpl implements SewerService {
     final SewerRepository sewerRepository;
     final OrderRepository orderRepository;
     final DepartmentRepository departmentRepository;
+    final UserRepository userRepository;
 
     @Override
     public SewerResponse save(SewerRequest t) {
         Order order = orderRepository.findById(t.getOrderId()).orElseThrow(() -> new OrderNotFoundException("Такого заказа нет", HttpStatus.BAD_REQUEST));
+        User user = userRepository.findById(t.getUserId()).orElseThrow(() -> new UserNotFoundException("Такого пользователя нет", HttpStatus.BAD_REQUEST));
         Department department = departmentRepository.findById(t.getDepartmentId()).orElseThrow(() -> new DepartmentNotFoundException("Такого отедал нет", HttpStatus.BAD_REQUEST));
         Sewer sewer = sewerRepository.save(Sewer.builder()
+                .id(user.getId())
                 .department(department)
                 .fio(t.getFio())
                 .needAmount(t.getNeedAmount())
                 .order(order)
+                .user(user)
                 .status(t.getStatus())
                 .build());
         OrderResponse orderResponse = OrderResponse.builder()
@@ -87,7 +94,6 @@ public class SewerServiceImpl implements SewerService {
         return SewerResponse.builder()
                 .id(sewer.getId())
                 .status(sewer.getStatus())
-
                 .unitPrice(sewer.getOrder().getUnitPrice())
                 .build();
 
@@ -96,7 +102,6 @@ public class SewerServiceImpl implements SewerService {
     @Override
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
-        sewer.setNeedAmount(sewer.getNeedAmount());
         sewer.setStatus(t.getStatus());
         sewerRepository.save(sewer);
         return sewer.getId() != null;
@@ -105,7 +110,12 @@ public class SewerServiceImpl implements SewerService {
     @Override//доработать
     public BigDecimal countSewerSalary(Long id){
         Sewer sewer = sewerRepository.getById(id);
-        BigDecimal salary = BigDecimal.valueOf(sewer.getNeedAmount() * sewer.getOrder().getUnitPrice());
-        return salary;
+        if (sewer.getStatus().equals("Done")) {
+            BigDecimal salary = BigDecimal.valueOf(sewer.getNeedAmount() * sewer.getOrder().getUnitPrice());
+            sewer.setNeedAmount(0L);
+            sewer.setStatus("Waiting");
+            sewerRepository.save(sewer);
+            return salary;
+        } else return null;
     }
 }

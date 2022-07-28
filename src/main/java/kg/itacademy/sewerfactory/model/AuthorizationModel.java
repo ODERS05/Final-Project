@@ -12,5 +12,6 @@ import lombok.experimental.FieldDefaults;
 public class AuthorizationModel {
     String token;
 
-    Long id;
+    User user;
+
 }

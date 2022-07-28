@@ -70,7 +70,11 @@ public class UserServiceImpl implements UserService {
         if (isMatches) {
             return AuthorizationModel.builder().token("Basic " + new String(Base64.getEncoder()
                             .encode((user.getLogin() + ":" + request.getPassword()).getBytes())))
-                    .id(user.getId())
+                    .user(User.builder()
+                            .login(user.getLogin())
+                            .password(user.getPassword())
+                            .email(user.getEmail())
+                            .isActive(user.getIsActive()).build())
                     .build();
         } else {
             throw new UserSignInException("Неправильный логин или пароль!", HttpStatus.NOT_FOUND);

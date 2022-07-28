@@ -3,9 +3,8 @@ package kg.itacademy.sewerfactory.entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "customer")
@@ -18,4 +17,8 @@ import javax.persistence.Table;
 public class Customer extends BaseEntity{
     @Column(name = "fio", nullable = false, unique = true)
     String fio;
+
+    @ManyToMany
+    @JoinColumn(name = "order_id")
+    List<Order> orders;
 }

@@ -11,9 +11,12 @@ import java.time.LocalDateTime;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SewerRequest{
+
     String fio;
 
     Long needAmount;
+
+    Long userId;
 
     Long orderId;
 

@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserAuthRequest {
+
     String Email;
 
     String password;
