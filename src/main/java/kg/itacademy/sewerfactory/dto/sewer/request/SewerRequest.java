@@ -22,5 +22,7 @@ public class SewerRequest{
 
     String status;
 
+    String phoneNumber;
+
     Long departmentId;
 }

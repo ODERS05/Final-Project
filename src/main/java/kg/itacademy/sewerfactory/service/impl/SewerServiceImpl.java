@@ -45,11 +45,12 @@ public class SewerServiceImpl implements SewerService {
         Sewer sewer = sewerRepository.save(Sewer.builder()
                 .id(user.getId())
                 .department(department)
+                .phoneNumber(t.getPhoneNumber())
                 .fio(t.getFio())
                 .needAmount(t.getNeedAmount())
                 .order(order)
                 .user(user)
-                .status(t.getStatus())
+                .status("Waiting")
                 .build());
         OrderResponse orderResponse = OrderResponse.builder()
                 .amount(order.getAmount())
@@ -60,12 +61,14 @@ public class SewerServiceImpl implements SewerService {
                 .build();
         return SewerResponse.builder()
                 .fio(sewer.getFio())
+                .phoneNumber(sewer.getPhoneNumber())
                 .clothesType(orderResponse.getClothType())
                 .needAmount(sewer.getNeedAmount())
                 .unitPrice(orderResponse.getUnitPrice())
                 .departmentName(departmentResponse.getDepartmentName())
                 .id(sewer.getId())
                 .status(sewer.getStatus())
+                .email(sewer.getUser().getEmail())
                 .build();
     }
 
@@ -77,12 +80,14 @@ public class SewerServiceImpl implements SewerService {
         for (Sewer sewer : sewers) {
             sewerResponses.add(SewerResponse.builder()
                     .status(sewer.getStatus())
+                    .phoneNumber(sewer.getPhoneNumber())
                     .unitPrice(sewer.getOrder().getUnitPrice())
                     .id(sewer.getId())
                     .departmentName(sewer.getDepartment().getDepartmentName())
                     .needAmount(sewer.getNeedAmount())
                     .fio(sewer.getFio())
                     .clothesType(sewer.getOrder().getClothesType())
+                    .email(sewer.getUser().getEmail())
                     .build());
         }
         return sewerResponses;
@@ -93,8 +98,14 @@ public class SewerServiceImpl implements SewerService {
         Sewer sewer = sewerRepository.getById(id);
         return SewerResponse.builder()
                 .id(sewer.getId())
+                .fio(sewer.getFio())
+                .phoneNumber(sewer.getPhoneNumber())
+                .clothesType(sewer.getOrder().getClothesType())
+                .needAmount(sewer.getNeedAmount())
+                .departmentName(sewer.getDepartment().getDepartmentName())
                 .status(sewer.getStatus())
                 .unitPrice(sewer.getOrder().getUnitPrice())
+                .email(sewer.getUser().getEmail())
                 .build();
 
     }

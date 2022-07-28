@@ -14,9 +14,6 @@ import java.util.List;
 public interface DepartmentMapper {
     DepartmentMapper INSTANCE = Mappers.getMapper(DepartmentMapper.class);
     Department toDepartmentEntity(DepartmentRequest departmentRequest);
-    @Mappings(value = {
-            @Mapping(source = "sewer", target = "sewers")
-    })
     DepartmentResponse toDepartmentResponse(Department department);
     List<DepartmentResponse> toDepartmentsResponse(List<Department> entities);
 }

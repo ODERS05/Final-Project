@@ -1,6 +1,7 @@
 package kg.itacademy.sewerfactory.controller;
 
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
+import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
 import kg.itacademy.sewerfactory.service.OrderService;
 import lombok.AccessLevel;
@@ -30,5 +31,11 @@ public class OrderController {
     @GetMapping("/{id}")
     public OrderResponse findById(@PathVariable Long id) {
         return orderService.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Boolean updateOrder(@RequestBody OrderUpdateRequest request, @PathVariable Long id){
+        request.setId(id);
+        return orderService.updateOrder(request);
     }
 }

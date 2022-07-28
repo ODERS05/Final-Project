@@ -20,7 +20,7 @@ public class Department extends BaseEntity{
 
     @ManyToMany
     @JoinColumn(name = "sewer_id")
-    List<Sewer> sewer;
+    List<Sewer> sewers;
 
     @ManyToOne
     @JoinColumn(name = "order_id")

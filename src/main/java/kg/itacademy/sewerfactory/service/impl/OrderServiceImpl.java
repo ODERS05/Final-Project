@@ -1,6 +1,7 @@
 package kg.itacademy.sewerfactory.service.impl;
 
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
+import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.mapper.OrderMapper;
@@ -27,6 +28,7 @@ public class OrderServiceImpl implements OrderService {
                 .amount(t.getAmount())
                 .unitPrice(t.getUnitPrice())
                 .status(t.getStatus())
+                .newOrder(true)
                 .build());
 
         return OrderMapper.INSTANCE.toOrderResponse(order);
@@ -40,5 +42,17 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse findById(Long id) {
         return OrderMapper.INSTANCE.toOrderResponse(orderRepository.getById(id));
+    }
+
+    @Override
+    public Boolean updateOrder(OrderUpdateRequest t) {
+        Order order = orderRepository.getById(t.getId());
+        order.setNewOrder(t.getNewOrder());
+        order.setUnitPrice(t.getUnitPrice());
+        order.setAmount(t.getAmount());
+        order.setClothesType(t.getClothesType());
+        order.setStatus(t.getStatus());
+        orderRepository.save(order);
+        return order.getId() != null;
     }
 }

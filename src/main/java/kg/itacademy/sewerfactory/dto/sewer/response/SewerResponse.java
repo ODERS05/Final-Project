@@ -16,6 +16,8 @@ public class SewerResponse {
 
     Long needAmount;
 
+    String phoneNumber;
+
     String clothesType;
 
     Integer unitPrice;
@@ -23,5 +25,7 @@ public class SewerResponse {
     String status;
 
     String departmentName;
+
+    String email;
 }
 

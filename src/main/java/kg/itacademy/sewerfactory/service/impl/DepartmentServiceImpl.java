@@ -45,10 +45,10 @@ public class DepartmentServiceImpl implements DepartmentService {
             for (int i = 0; i < t.getSewerId().size(); i++) {
                 sewers.add(sewerRepository.findById(t.getSewerId().get(i)).get());
             }
+            department.setSewers(sewers);
+            departmentRepository.save(department);
             Type listType = new TypeToken<List<SewerResponse>>(){}.getType();
             List<SewerResponse> sewerResponses = modelMapper.map(sewers,listType);
-            department.setSewer(sewers);
-            departmentRepository.save(department);
             return DepartmentResponse.builder()
                     .id(department.getId())
                     .sewers(sewerResponses)

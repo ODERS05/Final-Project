@@ -42,6 +42,9 @@ public class Sewer{
     @Column(name = "fio", nullable = false, unique = true)
     String fio;
 
+    @Column(name = "phone_number")
+    String phoneNumber;
+
     @Column(name = "need_amount")
     Long needAmount;
 

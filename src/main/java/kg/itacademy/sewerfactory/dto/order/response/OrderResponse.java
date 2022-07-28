@@ -18,4 +18,6 @@ public class OrderResponse {
     Integer unitPrice;
 
     String status;
+
+    Boolean newOrder;
 }
