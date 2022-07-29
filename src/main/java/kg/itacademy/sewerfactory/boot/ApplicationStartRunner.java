@@ -22,17 +22,20 @@ public class ApplicationStartRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-       roleRepository.save(
-               Role.builder()
-                .roles(Roles.ROLE_CUSTOMER).build());
-        roleRepository.save(
-                Role.builder()
-                        .roles(Roles.ROLE_SEWER).build());
-        roleRepository.save(
-                Role.builder()
-                        .roles(Roles.ROLE_ADMIN)
-                        .build()
-        );
+//       roleRepository.save(
+//               Role.builder()
+//                       .id(1L)
+//                .roles(Roles.ROLE_CUSTOMER).build());
+//        roleRepository.save(
+//                Role.builder()
+//                        .id(2L)
+//                        .roles(Roles.ROLE_SEWER).build());
+//        roleRepository.save(
+//                Role.builder()
+//                        .id(3L)
+//                        .roles(Roles.ROLE_ADMIN)
+//                        .build()
+//        );
     }
 }
 

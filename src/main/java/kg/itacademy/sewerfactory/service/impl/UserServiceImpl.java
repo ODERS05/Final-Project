@@ -8,6 +8,7 @@ import kg.itacademy.sewerfactory.dto.user.response.UserResponse;
 import kg.itacademy.sewerfactory.entity.Role;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.entity.UserRole;
+import kg.itacademy.sewerfactory.enums.Roles;
 import kg.itacademy.sewerfactory.exception.NotUniqueRecord;
 import kg.itacademy.sewerfactory.exception.UserSignInException;
 import kg.itacademy.sewerfactory.mapper.UserMapper;
@@ -51,16 +52,21 @@ public class UserServiceImpl implements UserService {
                             .build());
             UserRole userRole = new UserRole();
             userRole.setUser(userRepository.save(user));
-            if (t.getRoles().equals("CUSTOMER")){
-                userRole.setRole(roleRepository.findFirstByRoles("ROLE_CUSTOMER"));
+            if (t.getRoles().equals(Roles.ROLE_CUSTOMER.name())) {
+                userRole.setRole(roleRepository.findById(1L).get());
             } else {
-                userRole.setRole(roleRepository.findFirstByRoles("ROLE_SEWER"));
+                userRole.setRole(roleRepository.findById(2L).get());
             }
             userRoleRepository.save(userRole);
-            return UserMapper.INSTANCE.toUserResponse(user);
+            return UserResponse.builder()
+                    .roles(t.getRoles())
+                    .email(user.getEmail())
+                    .id(user.getId())
+                    .login(user.getLogin()).build();
         } catch (Exception ignored) {
             throw new NotUniqueRecord("Не уникальный логин", HttpStatus.BAD_REQUEST);
         }
+
     }
 
     @Override
