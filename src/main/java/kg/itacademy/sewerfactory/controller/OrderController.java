@@ -38,4 +38,8 @@ public class OrderController {
         request.setId(id);
         return orderService.updateOrder(request);
     }
+    @GetMapping("/get-customer-orders/{id}")
+    public List<OrderResponse> getAllOrdersByCustomerId(@PathVariable Long id){
+        return orderService.getAllOrdersByCustomerId(id);
+    }
 }

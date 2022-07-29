@@ -9,5 +9,5 @@ import java.util.List;
 public interface OrderService extends BaseService<OrderResponse, OrderRequest> {
     Boolean updateOrder(OrderUpdateRequest t);
 
-    List<OrderResponse> getAllOrdersByCustomerId(List<OrderRequest> requests);
+    List<OrderResponse> getAllOrdersByCustomerId(Long id);
 }

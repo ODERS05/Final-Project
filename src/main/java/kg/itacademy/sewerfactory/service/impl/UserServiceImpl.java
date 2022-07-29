@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Base64;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -43,23 +44,23 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse save(UserRequest t) {
         try {
-            User user = userRepository
-                    .save(User.builder()
-                            .login(t.getLogin())
+
+            User user = userRepository.save(User.builder()
                             .email(t.getEmail())
-                            .password(passwordEncoder.encode(t.getPassword()))
                             .isActive(true)
-                            .build());
+                            .password(t.getPassword())
+                            .login(t.getLogin())
+                    .build());
             UserRole userRole = new UserRole();
             userRole.setUser(userRepository.save(user));
-            if (t.getRoles().equals(Roles.ROLE_CUSTOMER.name())) {
+            if (t.getRole().equals(Roles.ROLE_CUSTOMER.name())) {
                 userRole.setRole(roleRepository.findById(1L).get());
             } else {
                 userRole.setRole(roleRepository.findById(2L).get());
             }
             userRoleRepository.save(userRole);
             return UserResponse.builder()
-                    .roles(t.getRoles())
+                    .role(t.getRole())
                     .email(user.getEmail())
                     .id(user.getId())
                     .login(user.getLogin()).build();
@@ -100,7 +101,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getAll() {
-        return UserMapper.INSTANCE.toUsersResponse(userRepository.findAll());
+        List<UserResponse> userResponses = userRepository.findAll().stream()
+                .map(user -> UserResponse.builder().email(user.getEmail())
+                        .login(user.getLogin())
+                        .id(user.getId())
+                        .role(userRoleRepository.findByUser(user).getRole().getRoles()).build())
+                .collect(Collectors.toList());
+        return userResponses;
     }
 
     @Override

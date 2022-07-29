@@ -3,10 +3,7 @@ package kg.itacademy.sewerfactory.entity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 
 @Entity
@@ -30,6 +27,5 @@ public class User extends BaseEntity{
 
     @Column(name = "is_active")
     Boolean isActive;
-
 
 }

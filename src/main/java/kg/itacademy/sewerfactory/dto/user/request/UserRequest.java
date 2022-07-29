@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.dto.user.request;
 
+import kg.itacademy.sewerfactory.enums.Roles;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -15,5 +16,5 @@ public class UserRequest {
 
     String email;
 
-    String roles;
+    Roles role;
 }
