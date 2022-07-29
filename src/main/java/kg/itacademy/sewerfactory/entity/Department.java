@@ -18,10 +18,6 @@ public class Department extends BaseEntity{
     @Column(name = "department_name", nullable = false, unique = true)
     String departmentName;
 
-    @ManyToMany
-    @JoinColumn(name = "sewer_id")
-    List<Sewer> sewers;
-
     @ManyToOne
     @JoinColumn(name = "order_id")
     Order order;

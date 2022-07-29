@@ -45,8 +45,4 @@ public class Customer {
 
     @Column(name = "phone_number", nullable = false, unique = true)
     String phoneNumber;
-
-    @ManyToMany
-    @JoinColumn(name = "order_id")
-    List<Order> orders;
 }

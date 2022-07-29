@@ -5,6 +5,7 @@ import kg.itacademy.sewerfactory.dto.user.request.UserAuthRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserUpdateRequest;
 import kg.itacademy.sewerfactory.dto.user.response.UserResponse;
+import kg.itacademy.sewerfactory.entity.Role;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.entity.UserRole;
 import kg.itacademy.sewerfactory.exception.NotUniqueRecord;
@@ -49,13 +50,12 @@ public class UserServiceImpl implements UserService {
                             .isActive(true)
                             .build());
             UserRole userRole = new UserRole();
-
-            if (user.getLogin().equals("ADMIN")) {
-                userRole.setRole(roleRepository.findFirstByNameRole("ROLE_ADMIN"));
-            } else {
-                userRole.setRole(roleRepository.findFirstByNameRole("ROLE_USER"));
-            }
             userRole.setUser(userRepository.save(user));
+            if (t.getRoles().equals("CUSTOMER")){
+                userRole.setRole(roleRepository.findFirstByRoles("ROLE_CUSTOMER"));
+            } else {
+                userRole.setRole(roleRepository.findFirstByRoles("ROLE_SEWER"));
+            }
             userRoleRepository.save(userRole);
             return UserMapper.INSTANCE.toUserResponse(user);
         } catch (Exception ignored) {

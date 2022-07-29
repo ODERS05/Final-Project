@@ -16,6 +16,9 @@ import javax.swing.text.StyledEditorKit;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Order extends BaseEntity{
 
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    Customer customer;
 
     @Column(name = "clothes_type", nullable = false)
     String clothesType;

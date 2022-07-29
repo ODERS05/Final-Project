@@ -6,6 +6,7 @@ import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
 import kg.itacademy.sewerfactory.dto.sewer.request.SewerRequest;
 import kg.itacademy.sewerfactory.dto.sewer.request.SewerUpdateRequest;
 import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
+import kg.itacademy.sewerfactory.dto.user.request.UserRequest;
 import kg.itacademy.sewerfactory.entity.Department;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.Sewer;
@@ -39,7 +40,6 @@ public class SewerServiceImpl implements SewerService {
 
     @Override
     public SewerResponse save(SewerRequest t) {
-        Order order = orderRepository.findById(t.getOrderId()).orElseThrow(() -> new OrderNotFoundException("Такого заказа нет", HttpStatus.BAD_REQUEST));
         User user = userRepository.findById(t.getUserId()).orElseThrow(() -> new UserNotFoundException("Такого пользователя нет", HttpStatus.BAD_REQUEST));
         Department department = departmentRepository.findById(t.getDepartmentId()).orElseThrow(() -> new DepartmentNotFoundException("Такого отедал нет", HttpStatus.BAD_REQUEST));
         Sewer sewer = sewerRepository.save(Sewer.builder()
@@ -47,24 +47,15 @@ public class SewerServiceImpl implements SewerService {
                 .department(department)
                 .phoneNumber(t.getPhoneNumber())
                 .fio(t.getFio())
-                .needAmount(t.getNeedAmount())
-                .order(order)
                 .user(user)
                 .status("Waiting")
                 .build());
-        OrderResponse orderResponse = OrderResponse.builder()
-                .amount(order.getAmount())
-                .clothType(order.getClothesType())
-                .unitPrice(order.getUnitPrice()).build();
         DepartmentResponse departmentResponse = DepartmentResponse.builder()
                 .departmentName(department.getDepartmentName())
                 .build();
         return SewerResponse.builder()
                 .fio(sewer.getFio())
                 .phoneNumber(sewer.getPhoneNumber())
-                .clothesType(orderResponse.getClothType())
-                .needAmount(sewer.getNeedAmount())
-                .unitPrice(orderResponse.getUnitPrice())
                 .departmentName(departmentResponse.getDepartmentName())
                 .id(sewer.getId())
                 .status(sewer.getStatus())
@@ -114,6 +105,15 @@ public class SewerServiceImpl implements SewerService {
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
         sewer.setStatus(t.getStatus());
+        sewer.setDepartment(Department.builder().departmentName(t.getDepartmentName()).build());
+        sewer.setNeedAmount(t.getNeedAmount());
+        sewer.setFio(t.getFio());
+        sewer.setOrder(Order.builder()
+                .unitPrice(t.getUnitPrice())
+                .clothesType(t.getClothesType())
+                .build());
+        sewer.setPhoneNumber(t.getPhoneNumber());
+        sewer.setUser(User.builder().email(t.getEmail()).build());
         sewerRepository.save(sewer);
         return sewer.getId() != null;
     }

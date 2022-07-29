@@ -20,4 +20,6 @@ public class OrderResponse {
     String status;
 
     Boolean newOrder;
+
+    String fio;
 }

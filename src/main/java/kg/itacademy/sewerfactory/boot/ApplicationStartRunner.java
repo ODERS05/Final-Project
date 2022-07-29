@@ -1,6 +1,7 @@
 package kg.itacademy.sewerfactory.boot;
 
 import kg.itacademy.sewerfactory.entity.Role;
+import kg.itacademy.sewerfactory.enums.Roles;
 import kg.itacademy.sewerfactory.repository.RoleRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.repository.UserRoleRepository;
@@ -21,22 +22,17 @@ public class ApplicationStartRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-//       roleRepository.save(
-//               Role.builder()
-//                .nameRole("ROLE_ADMIN").build());
-//        roleRepository.save(
-//               Role.builder()
-//                      .nameRole("ROLE_USER")
-//                        .build()
-//        );
-//        roleRepository.save(
-//                Role.builder()
-//                        .nameRole("ROLE_SEWER").build());
-//        roleRepository.save(
-//                Role.builder()
-//                        .nameRole("ROLE_CUSTOMER")
-//                        .build()
-//        );
+       roleRepository.save(
+               Role.builder()
+                .roles(Roles.ROLE_CUSTOMER).build());
+        roleRepository.save(
+                Role.builder()
+                        .roles(Roles.ROLE_SEWER).build());
+        roleRepository.save(
+                Role.builder()
+                        .roles(Roles.ROLE_ADMIN)
+                        .build()
+        );
     }
 }
 

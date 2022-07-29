@@ -1,11 +1,10 @@
 package kg.itacademy.sewerfactory.entity;
 
+import kg.itacademy.sewerfactory.enums.Roles;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "role")
@@ -16,6 +15,7 @@ import javax.persistence.Table;
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Role extends BaseEntity{
-    @Column(name = "name_role", nullable = false)
-    String nameRole;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "roles", nullable = false)
+    Roles roles;
 }

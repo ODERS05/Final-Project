@@ -14,4 +14,6 @@ public class UserRequest {
     String password;
 
     String email;
+
+    String roles;
 }

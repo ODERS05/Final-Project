@@ -3,32 +3,39 @@ package kg.itacademy.sewerfactory.service.impl;
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
+import kg.itacademy.sewerfactory.entity.Customer;
 import kg.itacademy.sewerfactory.entity.Order;
+import kg.itacademy.sewerfactory.exception.CustomerNotFoundException;
 import kg.itacademy.sewerfactory.mapper.OrderMapper;
+import kg.itacademy.sewerfactory.repository.CustomerRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
+import kg.itacademy.sewerfactory.service.CustomerService;
 import kg.itacademy.sewerfactory.service.OrderService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import java.util.List;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @AllArgsConstructor
 public class OrderServiceImpl implements OrderService {
     final OrderRepository orderRepository;
+    final CustomerRepository customerRepository;
     @Override
     public OrderResponse save(OrderRequest t) {
+        Customer customer = customerRepository.findById(t.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Такого заказчика нет", HttpStatus.BAD_REQUEST));
         Order order = orderRepository.save(Order.builder()
                 .clothesType(t.getClothType())
                 .amount(t.getAmount())
                 .unitPrice(t.getUnitPrice())
                 .status(t.getStatus())
                 .newOrder(true)
+                .customer(customer)
                 .build());
 
         return OrderMapper.INSTANCE.toOrderResponse(order);
@@ -55,4 +62,11 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.save(order);
         return order.getId() != null;
     }
+
+    @Override
+    public List<OrderResponse> getAllOrdersByCustomerId(List<OrderRequest> requests) {
+
+        return null;
+    }
+
 }

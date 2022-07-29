@@ -11,7 +11,19 @@ import lombok.experimental.FieldDefaults;
 public class SewerUpdateRequest {
     Long id;
 
-    String status;
+    String fio;
 
     Long needAmount;
+
+    String phoneNumber;
+
+    String clothesType;
+
+    Integer unitPrice;
+
+    String status;
+
+    String departmentName;
+
+    String email;
 }

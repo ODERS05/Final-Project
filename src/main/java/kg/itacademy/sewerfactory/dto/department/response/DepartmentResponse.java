@@ -14,8 +14,6 @@ import java.util.List;
 public class DepartmentResponse {
     Long id;
 
-    List<SewerResponse> sewers;
-
     String clothType;
 
     Long amount;

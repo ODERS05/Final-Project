@@ -18,6 +18,4 @@ public class CustomerResponse {
     String fio;
 
     String phoneNumber;
-
-    List<OrderResponse> orders;
 }

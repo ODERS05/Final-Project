@@ -16,6 +16,4 @@ public class CustomerRequest {
     String fio;
 
     String phoneNumber;
-
-    List<Long> orderId;
 }

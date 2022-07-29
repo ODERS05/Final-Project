@@ -1,15 +1,15 @@
 package kg.itacademy.sewerfactory.entity;
 
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @MappedSuperclass
 @Getter
 @Setter
