@@ -11,7 +11,7 @@ import lombok.experimental.FieldDefaults;
 public class OrderRequest {
     Long customerId;
 
-    String clothType;
+    String clothesType;
 
     Long amount;
 

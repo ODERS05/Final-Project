@@ -24,6 +24,8 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -51,7 +53,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerResponse> getAll() {
-        return CustomerMapper.INSTANCE.toCustomersResponse(customerRepository.findAll());
+        List<CustomerResponse> customerResponses = customerRepository.findAll().stream()
+                .map(customer -> CustomerResponse.builder()
+                        .id(customer.getId())
+                        .fio(customer.getFio())
+                        .email(customer.getUser().getEmail())
+                        .phoneNumber(customer.getPhoneNumber())
+                        .build()).collect(Collectors.toList());
+        return customerResponses;
 
     }
 

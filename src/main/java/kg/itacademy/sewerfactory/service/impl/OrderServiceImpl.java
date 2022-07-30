@@ -9,7 +9,6 @@ import kg.itacademy.sewerfactory.exception.CustomerNotFoundException;
 import kg.itacademy.sewerfactory.mapper.OrderMapper;
 import kg.itacademy.sewerfactory.repository.CustomerRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
-import kg.itacademy.sewerfactory.service.CustomerService;
 import kg.itacademy.sewerfactory.service.OrderService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,7 +30,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse save(OrderRequest t) {
         Customer customer = customerRepository.findById(t.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Такого заказчика нет", HttpStatus.BAD_REQUEST));
         Order order = orderRepository.save(Order.builder()
-                .clothesType(t.getClothType())
+                .clothesType(t.getClothesType())
                 .amount(t.getAmount())
                 .unitPrice(t.getUnitPrice())
                 .status(t.getStatus())

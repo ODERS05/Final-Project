@@ -48,12 +48,12 @@ public class UserServiceImpl implements UserService {
             User user = userRepository.save(User.builder()
                             .email(t.getEmail())
                             .isActive(true)
-                            .password(t.getPassword())
+                            .password(passwordEncoder.encode(t.getPassword()))
                             .login(t.getLogin())
                     .build());
             UserRole userRole = new UserRole();
             userRole.setUser(userRepository.save(user));
-            if (t.getRole().equals(Roles.ROLE_CUSTOMER.name())) {
+            if (t.getRole().equals(Roles.ROLE_CUSTOMER)){
                 userRole.setRole(roleRepository.findById(1L).get());
             } else {
                 userRole.setRole(roleRepository.findById(2L).get());
