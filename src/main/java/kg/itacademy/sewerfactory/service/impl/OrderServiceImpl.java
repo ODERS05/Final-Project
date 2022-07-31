@@ -16,8 +16,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -73,12 +73,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponse> getAllOrdersByCustomerId(Long id) {
-        List<Order> orders = orderRepository.findAll();
-        List<OrderResponse> orderResponses = new ArrayList<>();
-        for (Order order: orders) {
-            orderResponses.add(orderRepository.findAllOrdersByCustomerId(id));
-        }
-        return orderResponses;
+        return orderRepository.findAll().stream()
+                .map(order -> orderRepository.findAllOrdersByCustomerId(id)).collect(Collectors.toList());
     }
-
 }

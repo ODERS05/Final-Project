@@ -5,7 +5,6 @@ import kg.itacademy.sewerfactory.dto.user.request.UserAuthRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserUpdateRequest;
 import kg.itacademy.sewerfactory.dto.user.response.UserResponse;
-import kg.itacademy.sewerfactory.entity.Role;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.entity.UserRole;
 import kg.itacademy.sewerfactory.enums.Roles;
@@ -98,13 +97,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getAll() {
-        List<UserResponse> userResponses = userRepository.findAll().stream()
+        return userRepository.findAll().stream()
                 .map(user -> UserResponse.builder().email(user.getEmail())
                         .login(user.getLogin())
                         .id(user.getId())
                         .role(userRoleRepository.findByUser(user).getRole().getRoles()).build())
                 .collect(Collectors.toList());
-        return userResponses;
     }
 
     @Override

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends JpaRepository<Order, Long> {
-    @Query(nativeQuery = true, value = "select orders.customer_id from orders where orders.id =:id")
+    @Query(nativeQuery = true, value = "select orders.* from orders where orders.customer_id = :id")
     OrderResponse findAllOrdersByCustomerId(Long id);
 }
 
