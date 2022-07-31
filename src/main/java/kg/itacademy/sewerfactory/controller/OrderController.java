@@ -3,6 +3,7 @@ package kg.itacademy.sewerfactory.controller;
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
+import kg.itacademy.sewerfactory.dto.order.response.OrderResponseInterface;
 import kg.itacademy.sewerfactory.service.OrderService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -39,7 +40,7 @@ public class OrderController {
         return orderService.updateOrder(request);
     }
     @GetMapping("/get-customer-orders/{id}")
-    public List<OrderResponse> getAllOrdersByCustomerId(@PathVariable Long id){
+    public List<OrderResponseInterface> getAllOrdersByCustomerId(@PathVariable Long id){
         return orderService.getAllOrdersByCustomerId(id);
     }
 }

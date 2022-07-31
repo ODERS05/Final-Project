@@ -3,6 +3,7 @@ package kg.itacademy.sewerfactory.service.impl;
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
+import kg.itacademy.sewerfactory.dto.order.response.OrderResponseInterface;
 import kg.itacademy.sewerfactory.entity.Customer;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.exception.CustomerNotFoundException;
@@ -15,7 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,7 +51,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponse> getAll() {
-        return OrderMapper.INSTANCE.toOrdersResponse(orderRepository.findAll());
+        return orderRepository.findAll().stream()
+                .map(order -> OrderResponse.builder()
+                        .newOrder(order.getNewOrder())
+                        .id(order.getId())
+                        .fio(order.getCustomer().getFio())
+                        .clothesType(order.getClothesType())
+                        .unitPrice(order.getUnitPrice())
+                        .status(order.getStatus())
+                        .amount(order.getAmount())
+                .build()).collect(Collectors.toList());
     }
 
     @Override
@@ -72,8 +81,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponse> getAllOrdersByCustomerId(Long id) {
-        return orderRepository.findAll().stream()
-                .map(order -> orderRepository.findAllOrdersByCustomerId(id)).collect(Collectors.toList());
+    public List<OrderResponseInterface> getAllOrdersByCustomerId(Long id) {
+        List<OrderResponseInterface> orderResponses = orderRepository.findAllOrdersByCustomerId(id);
+        return orderResponses;
     }
+
 }

@@ -29,6 +29,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -65,24 +66,19 @@ public class SewerServiceImpl implements SewerService {
     }
 
     @Override
-    public List<SewerResponse> getAll() {
-
-        List<Sewer> sewers = sewerRepository.findAll();
-        List<SewerResponse> sewerResponses = new ArrayList<>();
-        for (Sewer sewer : sewers) {
-            sewerResponses.add(SewerResponse.builder()
-                    .status(sewer.getStatus())
-                    .phoneNumber(sewer.getPhoneNumber())
-                    .unitPrice(sewer.getOrder().getUnitPrice())
-                    .id(sewer.getId())
-                    .departmentName(sewer.getDepartment().getDepartmentName())
-                    .needAmount(sewer.getNeedAmount())
-                    .fio(sewer.getFio())
-                    .clothesType(sewer.getOrder().getClothesType())
-                    .email(sewer.getUser().getEmail())
-                    .build());
-        }
-        return sewerResponses;
+    public List<SewerResponse> getAll() throws NullPointerException{
+        return sewerRepository.findAll().stream()
+                .map(sewer -> SewerResponse.builder()
+                        .status(sewer.getStatus())
+                        .phoneNumber(sewer.getPhoneNumber())
+                        .unitPrice(sewer.getOrder().getUnitPrice())
+                        .id(sewer.getId())
+                        .departmentName(sewer.getDepartment().getDepartmentName())
+                        .needAmount(sewer.getNeedAmount())
+                        .fio(sewer.getFio())
+                        .clothesType(sewer.getOrder().getClothesType())
+                        .email(sewer.getUser().getEmail())
+                        .build()).collect(Collectors.toList());
     }
 
     @Override
