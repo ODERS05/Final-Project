@@ -20,8 +20,6 @@ public class SewerRequest{
 
     Long orderId;
 
-    String status;
-
     String phoneNumber;
 
     Long departmentId;

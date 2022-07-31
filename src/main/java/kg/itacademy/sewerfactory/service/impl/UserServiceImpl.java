@@ -73,15 +73,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public AuthorizationModel getToken(UserAuthRequest request) throws UserSignInException {
         User user = userRepository.findByLoginOrEmail(request.getEmail());
+        UserRole userRole = userRoleRepository.findByUser(user);
         boolean isMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (isMatches) {
             return AuthorizationModel.builder().token("Basic " + new String(Base64.getEncoder()
                             .encode((user.getLogin() + ":" + request.getPassword()).getBytes())))
-                    .user(User.builder()
-                            .login(user.getLogin())
-                            .password(user.getPassword())
-                            .email(user.getEmail())
-                            .isActive(user.getIsActive()).build())
+                    .userRole(userRole)
                     .build();
         } else {
             throw new UserSignInException("Неправильный логин или пароль!", HttpStatus.NOT_FOUND);

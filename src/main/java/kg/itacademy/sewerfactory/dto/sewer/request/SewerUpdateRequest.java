@@ -17,9 +17,7 @@ public class SewerUpdateRequest {
 
     String phoneNumber;
 
-    String clothesType;
-
-    Integer unitPrice;
+    Long orderId;
 
     String status;
 

@@ -12,6 +12,7 @@ import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.Sewer;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.exception.DepartmentNotFoundException;
+import kg.itacademy.sewerfactory.exception.ImpossibleCaseException;
 import kg.itacademy.sewerfactory.exception.OrderNotFoundException;
 import kg.itacademy.sewerfactory.exception.UserNotFoundException;
 import kg.itacademy.sewerfactory.repository.DepartmentRepository;
@@ -104,16 +105,17 @@ public class SewerServiceImpl implements SewerService {
     @Override
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
+        Order order = orderRepository.getById(t.getOrderId());
         sewer.setStatus(t.getStatus());
         sewer.setDepartment(Department.builder().departmentName(t.getDepartmentName()).build());
         sewer.setNeedAmount(t.getNeedAmount());
         sewer.setFio(t.getFio());
-        sewer.setOrder(Order.builder()
-                .unitPrice(t.getUnitPrice())
-                .clothesType(t.getClothesType())
-                .build());
+        sewer.setOrder(order);
         sewer.setPhoneNumber(t.getPhoneNumber());
         sewer.setUser(User.builder().email(t.getEmail()).build());
+        if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > order.getAmount()){
+            throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
+        }
         sewerRepository.save(sewer);
         return sewer.getId() != null;
     }

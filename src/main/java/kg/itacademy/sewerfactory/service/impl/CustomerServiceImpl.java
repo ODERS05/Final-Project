@@ -6,10 +6,13 @@ import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
 import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
 import kg.itacademy.sewerfactory.entity.Customer;
 import kg.itacademy.sewerfactory.entity.Order;
+import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.exception.NotUniqueCustomer;
+import kg.itacademy.sewerfactory.exception.UserNotFoundException;
 import kg.itacademy.sewerfactory.mapper.CustomerMapper;
 import kg.itacademy.sewerfactory.repository.CustomerRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
+import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.service.CustomerService;
 import kg.itacademy.sewerfactory.service.OrderService;
 import lombok.AccessLevel;
@@ -31,13 +34,16 @@ import java.util.stream.Collectors;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CustomerServiceImpl implements CustomerService {
     final CustomerRepository customerRepository;
+    final UserRepository userRepository;
     @Override
     public CustomerResponse save(CustomerRequest t) {
         try {
+            User user = userRepository.findById(t.getUserId()).orElseThrow(() -> new UserNotFoundException("Такого пользователя нет", HttpStatus.BAD_REQUEST));
             Customer customer = customerRepository.save(Customer.builder()
                     .id(t.getUserId())
                     .fio(t.getFio())
                     .phoneNumber(t.getPhoneNumber())
+                    .user(user)
                     .build());
             customerRepository.save(customer);
             return CustomerResponse.builder()

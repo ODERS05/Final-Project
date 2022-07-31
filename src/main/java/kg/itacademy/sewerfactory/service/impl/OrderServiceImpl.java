@@ -33,12 +33,20 @@ public class OrderServiceImpl implements OrderService {
                 .clothesType(t.getClothesType())
                 .amount(t.getAmount())
                 .unitPrice(t.getUnitPrice())
-                .status(t.getStatus())
+                .status("Waiting")
                 .newOrder(true)
                 .customer(customer)
                 .build());
 
-        return OrderMapper.INSTANCE.toOrderResponse(order);
+        return OrderResponse.builder()
+                .id(order.getId())
+                .newOrder(order.getNewOrder())
+                .status(order.getStatus())
+                .unitPrice(order.getUnitPrice())
+                .amount(order.getAmount())
+                .clothesType(order.getClothesType())
+                .fio(order.getCustomer().getFio())
+                .build();
     }
 
     @Override

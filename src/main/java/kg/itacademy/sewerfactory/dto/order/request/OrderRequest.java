@@ -17,7 +17,5 @@ public class OrderRequest {
 
     Integer unitPrice;
 
-    String status;
-
     Boolean newOrder;
 }
