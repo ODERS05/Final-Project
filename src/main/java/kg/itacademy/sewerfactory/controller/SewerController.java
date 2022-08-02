@@ -44,6 +44,11 @@ public class SewerController {
         return sewerService.countSewerSalary(id);
     }
 
+    @GetMapping("/get-department-customer/{id}")
+    public List<SewerResponse> getAllSewersByDepartmentId(@PathVariable Long id){
+        return sewerService.getAllSewersByDepartmentId(id);
+    }
+
     @DeleteMapping("/{id}")
     public SewerResponse delete(@PathVariable Long id){
         return sewerService.delete(id);

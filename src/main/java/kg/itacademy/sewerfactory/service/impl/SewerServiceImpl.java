@@ -71,12 +71,12 @@ public class SewerServiceImpl implements SewerService {
                 .map(sewer -> SewerResponse.builder()
                         .status(sewer.getStatus())
                         .phoneNumber(sewer.getPhoneNumber())
-                        .unitPrice(sewer.getOrder().getUnitPrice())
+                        .unitPrice(sewer.getOrder() == null ? null : sewer.getOrder().getUnitPrice())
                         .id(sewer.getId())
                         .departmentName(sewer.getDepartment().getDepartmentName())
                         .needAmount(sewer.getNeedAmount())
                         .fio(sewer.getFio())
-                        .clothesType(sewer.getOrder().getClothesType())
+                        .clothesType(sewer.getOrder() == null ? null : sewer.getOrder().getClothesType())
                         .email(sewer.getUser().getEmail())
                         .build()).collect(Collectors.toList());
     }
@@ -132,5 +132,21 @@ public class SewerServiceImpl implements SewerService {
             sewerRepository.save(sewer);
             return salary;
         } else return null;
+    }
+
+    @Override
+    public List<SewerResponse> getAllSewersByDepartmentId(Long id) {
+        return sewerRepository.findAllSewersByDepartmentId(id).stream()
+                .map(sewer -> SewerResponse.builder()
+                        .status(sewer.getStatus())
+                        .phoneNumber(sewer.getPhoneNumber())
+                        .unitPrice(sewer.getOrder() == null ? null : sewer.getOrder().getUnitPrice())
+                        .id(sewer.getId())
+                        .departmentName(sewer.getDepartment().getDepartmentName())
+                        .needAmount(sewer.getNeedAmount())
+                        .fio(sewer.getFio())
+                        .clothesType(sewer.getOrder() == null ? null : sewer.getOrder().getClothesType())
+                        .email(sewer.getUser().getEmail())
+                        .build()).collect(Collectors.toList());
     }
 }

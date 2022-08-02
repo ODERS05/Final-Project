@@ -3,7 +3,6 @@ package kg.itacademy.sewerfactory.service.impl;
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
-import kg.itacademy.sewerfactory.dto.order.response.OrderResponseInterface;
 import kg.itacademy.sewerfactory.entity.Customer;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.exception.CustomerNotFoundException;
@@ -88,9 +87,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<OrderResponseInterface> getAllOrdersByCustomerId(Long id) {
-        List<OrderResponseInterface> orderResponses = orderRepository.findAllOrdersByCustomerId(id);
-        return orderResponses;
+    public List<OrderResponse> getAllOrdersByCustomerId(Long id) {
+        return orderRepository.findAllOrdersByCustomerId(id).stream()
+                .map(order -> OrderResponse.builder()
+                        .amount(order.getAmount())
+                        .id(order.getId())
+                        .newOrder(order.getNewOrder())
+                        .status(order.getStatus())
+                        .unitPrice(order.getUnitPrice())
+                        .fio(order.getCustomer().getFio())
+                        .clothesType(order.getClothesType())
+                        .build()).collect(Collectors.toList());
     }
-
 }
