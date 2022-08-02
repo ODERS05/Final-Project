@@ -99,6 +99,13 @@ public class SewerServiceImpl implements SewerService {
     }
 
     @Override
+    public SewerResponse delete(Long id){
+        Sewer sewer = sewerRepository.getById(id);
+        sewerRepository.delete(sewer);
+        return SewerResponse.builder().build();
+    }
+
+    @Override
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
         Order order = orderRepository.getById(t.getOrderId());
@@ -108,7 +115,6 @@ public class SewerServiceImpl implements SewerService {
         sewer.setFio(t.getFio());
         sewer.setOrder(order);
         sewer.setPhoneNumber(t.getPhoneNumber());
-        sewer.setUser(User.builder().email(t.getEmail()).build());
         if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > order.getAmount()){
             throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
         }

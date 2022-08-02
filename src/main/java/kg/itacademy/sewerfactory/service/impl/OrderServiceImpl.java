@@ -69,6 +69,13 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public OrderResponse delete(Long id) {
+        Order order = orderRepository.getById(id);
+        orderRepository.delete(order);
+        return OrderResponse.builder().build();
+    }
+
+    @Override
     public Boolean updateOrder(OrderUpdateRequest t) {
         Order order = orderRepository.getById(t.getId());
         order.setNewOrder(t.getNewOrder());

@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.controller;
 
+import kg.itacademy.sewerfactory.dto.department.response.DepartmentResponse;
 import kg.itacademy.sewerfactory.dto.sewer.request.SewerRequest;
 import kg.itacademy.sewerfactory.dto.sewer.request.SewerUpdateRequest;
 import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
@@ -38,8 +39,13 @@ public class SewerController {
         return sewerService.findById(id);
     };
 
-    @GetMapping("count-salary/{id}")
+    @GetMapping("/count-salary/{id}")
     public BigDecimal countSewerSalary(@PathVariable Long id){
         return sewerService.countSewerSalary(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public SewerResponse delete(@PathVariable Long id){
+        return sewerService.delete(id);
     }
 }

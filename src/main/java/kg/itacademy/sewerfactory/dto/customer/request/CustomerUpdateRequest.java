@@ -1,4 +1,4 @@
-package kg.itacademy.sewerfactory.dto.department.request;
+package kg.itacademy.sewerfactory.dto.customer.request;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -8,10 +8,10 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class DepartmentUpdateRequest {
+public class CustomerUpdateRequest {
     Long id;
 
-    String departmentName;
+    String fio;
 
-    Long orderId;
+    String phoneNumber;
 }

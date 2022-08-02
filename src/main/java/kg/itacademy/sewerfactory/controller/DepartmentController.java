@@ -1,7 +1,9 @@
 package kg.itacademy.sewerfactory.controller;
 
 import kg.itacademy.sewerfactory.dto.department.request.DepartmentRequest;
+import kg.itacademy.sewerfactory.dto.department.request.DepartmentUpdateRequest;
 import kg.itacademy.sewerfactory.dto.department.response.DepartmentResponse;
+import kg.itacademy.sewerfactory.dto.user.response.UserResponse;
 import kg.itacademy.sewerfactory.service.DepartmentService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -31,9 +33,14 @@ public class DepartmentController {
         return departmentService.findById(id);
     }
 
-//    @PutMapping("/{id}")
-//    public Boolean updateFloor(@RequestBody FloorUpdateRequest request, @PathVariable Long id){
-//        request.setId(id);
-//        return departmentService.updateFloor(request);
-//    };
+    @PutMapping("/{id}")
+    public Boolean updateDepartment(@RequestBody DepartmentUpdateRequest request, @PathVariable Long id){
+        request.setId(id);
+        return departmentService.updateDepartment(request);
+    }
+
+    @DeleteMapping("/{id}")
+    public DepartmentResponse delete(@PathVariable Long id){
+        return departmentService.delete(id);
+    }
 }

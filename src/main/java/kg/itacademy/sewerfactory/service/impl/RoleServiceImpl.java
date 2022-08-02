@@ -41,4 +41,9 @@ public class RoleServiceImpl implements RoleService {
     public RoleResponse findById(Long id) {
         return RoleMapper.INSTANCE.toResponseDto(roleRepository.getById(id));
     }
+
+    @Override
+    public RoleResponse delete(Long id) {
+        return null;
+    }
 }

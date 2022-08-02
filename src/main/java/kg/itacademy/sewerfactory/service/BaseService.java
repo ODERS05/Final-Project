@@ -8,5 +8,7 @@ public interface BaseService<Response, Request> {
     List<Response> getAll();
 
     Response findById(Long id);
+
+    Response delete(Long id);
 }
 

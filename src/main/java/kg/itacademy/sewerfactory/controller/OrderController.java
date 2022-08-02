@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.controller;
 
+import kg.itacademy.sewerfactory.dto.department.response.DepartmentResponse;
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
@@ -42,5 +43,9 @@ public class OrderController {
     @GetMapping("/get-customer-orders/{id}")
     public List<OrderResponseInterface> getAllOrdersByCustomerId(@PathVariable Long id){
         return orderService.getAllOrdersByCustomerId(id);
+    }
+    @DeleteMapping("/{id}")
+    public OrderResponse delete(@PathVariable Long id){
+        return orderService.delete(id);
     }
 }

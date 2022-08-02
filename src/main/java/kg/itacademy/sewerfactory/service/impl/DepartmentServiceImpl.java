@@ -1,6 +1,7 @@
 package kg.itacademy.sewerfactory.service.impl;
 
 import kg.itacademy.sewerfactory.dto.department.request.DepartmentRequest;
+import kg.itacademy.sewerfactory.dto.department.request.DepartmentUpdateRequest;
 import kg.itacademy.sewerfactory.dto.department.response.DepartmentResponse;
 import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
 import kg.itacademy.sewerfactory.entity.Department;
@@ -30,6 +31,7 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DepartmentServiceImpl implements DepartmentService {
     final DepartmentRepository departmentRepository;
+    final  OrderRepository orderRepository;
     @Override
     public DepartmentResponse save(DepartmentRequest t) {
         try {
@@ -54,5 +56,22 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public DepartmentResponse findById(Long id) {
         return DepartmentMapper.INSTANCE.toDepartmentResponse(departmentRepository.getById(id));
+    }
+
+    @Override
+    public DepartmentResponse delete(Long id) {
+        Department department = departmentRepository.getById(id);
+        departmentRepository.delete(department);
+        return DepartmentResponse.builder().build();
+    }
+
+    @Override
+    public Boolean updateDepartment(DepartmentUpdateRequest t){
+        Department department = departmentRepository.getById(t.getId());
+        Order order = orderRepository.getById(t.getOrderId());
+        department.setDepartmentName(t.getDepartmentName());
+        department.setOrder(order);
+        departmentRepository.save(department);
+        return department.getId() != null;
     }
 }

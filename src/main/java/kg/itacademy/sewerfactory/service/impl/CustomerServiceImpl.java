@@ -1,31 +1,23 @@
 package kg.itacademy.sewerfactory.service.impl;
 
 import kg.itacademy.sewerfactory.dto.customer.request.CustomerRequest;
+import kg.itacademy.sewerfactory.dto.customer.request.CustomerUpdateRequest;
 import kg.itacademy.sewerfactory.dto.customer.response.CustomerResponse;
-import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
-import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
 import kg.itacademy.sewerfactory.entity.Customer;
-import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.exception.NotUniqueCustomer;
 import kg.itacademy.sewerfactory.exception.UserNotFoundException;
 import kg.itacademy.sewerfactory.mapper.CustomerMapper;
 import kg.itacademy.sewerfactory.repository.CustomerRepository;
-import kg.itacademy.sewerfactory.repository.OrderRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.service.CustomerService;
-import kg.itacademy.sewerfactory.service.OrderService;
+import kg.itacademy.sewerfactory.service.UserService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.aspectj.weaver.ast.Or;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,6 +27,7 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     final CustomerRepository customerRepository;
     final UserRepository userRepository;
+    final UserService userService;
     @Override
     public CustomerResponse save(CustomerRequest t) {
         try {
@@ -59,19 +52,42 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public List<CustomerResponse> getAll() {
-        List<CustomerResponse> customerResponses = customerRepository.findAll().stream()
+        return customerRepository.findAll().stream()
                 .map(customer -> CustomerResponse.builder()
                         .id(customer.getId())
                         .fio(customer.getFio())
                         .email(customer.getUser().getEmail())
                         .phoneNumber(customer.getPhoneNumber())
                         .build()).collect(Collectors.toList());
-        return customerResponses;
 
     }
 
     @Override
     public CustomerResponse findById(Long id) {
-        return CustomerMapper.INSTANCE.toCustomerResponse(customerRepository.getById(id));
+        Customer customer = customerRepository.getById(id);
+        User user = userRepository.getById(id);
+        return CustomerResponse.builder()
+                .phoneNumber(customer.getPhoneNumber())
+                .email(user.getEmail())
+                .fio(customer.getFio())
+                .id(customer.getId())
+                .build();
     }
+
+    @Override
+    public Boolean updateCustomer(CustomerUpdateRequest t) {
+        Customer customer = customerRepository.getById(t.getId());
+        customer.setFio(t.getFio());
+        customer.setPhoneNumber(t.getPhoneNumber());
+        customerRepository.save(customer);
+        return customer.getId() != null;
+    }
+
+    @Override
+    public CustomerResponse delete(Long id) {
+        Customer customer = customerRepository.getById(id);
+        customerRepository.delete(customer);
+        return CustomerResponse.builder().build();
+    }
+
 }
