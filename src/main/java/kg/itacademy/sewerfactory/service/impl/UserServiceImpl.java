@@ -11,7 +11,6 @@ import kg.itacademy.sewerfactory.enums.Roles;
 import kg.itacademy.sewerfactory.exception.NotUniqueRecord;
 import kg.itacademy.sewerfactory.exception.UserSignInException;
 import kg.itacademy.sewerfactory.mapper.UserMapper;
-import kg.itacademy.sewerfactory.model.AuthorizationModel;
 import kg.itacademy.sewerfactory.repository.RoleRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.repository.UserRoleRepository;
@@ -20,6 +19,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -45,14 +45,14 @@ public class UserServiceImpl implements UserService {
         try {
 
             User user = userRepository.save(User.builder()
-                            .email(t.getEmail())
-                            .isActive(true)
-                            .password(passwordEncoder.encode(t.getPassword()))
-                            .login(t.getLogin())
+                    .email(t.getEmail())
+                    .isActive(true)
+                    .password(passwordEncoder.encode(t.getPassword()))
+                    .login(t.getLogin())
                     .build());
             UserRole userRole = new UserRole();
             userRole.setUser(userRepository.save(user));
-            if (t.getRole().equals(Roles.ROLE_CUSTOMER)){
+            if (t.getRole().equals(Roles.ROLE_CUSTOMER)) {
                 userRole.setRole(roleRepository.findById(1L).get());
             } else {
                 userRole.setRole(roleRepository.findById(2L).get());
@@ -70,15 +70,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public AuthorizationModel getToken(UserAuthRequest request) throws UserSignInException {
+    public UserResponse findByToken() {
+        User user = userRepository.findByLoginOrEmail(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName());
+        return UserMapper.INSTANCE.toUserResponse(user);
+    }
+
+    @Override
+    public String getToken(UserAuthRequest request) throws UserSignInException {
         User user = userRepository.findByLoginOrEmail(request.getEmail());
-        UserRole userRole = userRoleRepository.findByUser(user);
         boolean isMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (isMatches) {
-            return AuthorizationModel.builder().token("Basic " + new String(Base64.getEncoder()
-                            .encode((user.getLogin() + ":" + request.getPassword()).getBytes())))
-                    .userRole(userRole)
-                    .build();
+            return "Basic " + new String(Base64.getEncoder()
+                    .encode((user.getLogin() + ":" + request.getPassword()).getBytes()));
         } else {
             throw new UserSignInException("Неправильный логин или пароль!", HttpStatus.NOT_FOUND);
         }
