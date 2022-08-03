@@ -71,8 +71,8 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = departmentRepository.getById(t.getId());
         Order order = null;
         if(t.getOrderId()!=null){
-             order = orderRepository.getById(t.getOrderId());
-            order.setStatus(t.getStatus());
+            order = orderRepository.getById(t.getOrderId());
+            order.setStatus(Status.INPROCESS);
         }
         department.setDepartmentName(t.getDepartmentName());
         department.setOrder(order);
