@@ -11,5 +11,7 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
     @Query(nativeQuery = true, value = "select orders.* from orders where orders.customer_id = :id")
     List<Order> findAllOrdersByCustomerId(Long id);
+
+    Long countByNewOrderIsTrue();
 }
 

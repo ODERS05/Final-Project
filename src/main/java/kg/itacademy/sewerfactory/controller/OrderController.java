@@ -46,4 +46,9 @@ public class OrderController {
     public OrderResponse delete(@PathVariable Long id){
         return orderService.delete(id);
     }
+
+    @GetMapping("/count-new-orders")
+    public Long returnNewOrdersCount(){
+        return orderService.returnNewOrdersCount();
+    }
 }

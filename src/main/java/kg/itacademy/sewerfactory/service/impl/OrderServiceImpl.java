@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,7 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse save(OrderRequest t) {
         Customer customer = customerRepository.findById(t.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Такого заказчика нет", HttpStatus.BAD_REQUEST));
+        BigDecimal totalCost = BigDecimal.valueOf(t.getAmount() * t.getUnitPrice());
         Order order = orderRepository.save(Order.builder()
                 .clothesType(t.getClothesType())
                 .amount(t.getAmount())
@@ -35,6 +38,7 @@ public class OrderServiceImpl implements OrderService {
                 .status("Waiting")
                 .newOrder(true)
                 .customer(customer)
+                .totalCost(totalCost)
                 .build());
 
         return OrderResponse.builder()
@@ -45,6 +49,7 @@ public class OrderServiceImpl implements OrderService {
                 .amount(order.getAmount())
                 .clothesType(order.getClothesType())
                 .fio(order.getCustomer().getFio())
+                .totalCost(order.getTotalCost())
                 .build();
     }
 
@@ -59,12 +64,23 @@ public class OrderServiceImpl implements OrderService {
                         .unitPrice(order.getUnitPrice())
                         .status(order.getStatus())
                         .amount(order.getAmount())
+                        .totalCost(order.getTotalCost())
                 .build()).collect(Collectors.toList());
     }
 
     @Override
     public OrderResponse findById(Long id) {
-        return OrderMapper.INSTANCE.toOrderResponse(orderRepository.getById(id));
+        Order order = orderRepository.getById(id);
+        return OrderResponse.builder()
+                .totalCost(order.getTotalCost())
+                .fio(order.getCustomer().getFio())
+                .clothesType(order.getClothesType())
+                .unitPrice(order.getUnitPrice())
+                .status(order.getStatus())
+                .newOrder(order.getNewOrder())
+                .id(order.getId())
+                .amount(order.getAmount())
+                .build();
     }
 
     @Override
@@ -97,6 +113,13 @@ public class OrderServiceImpl implements OrderService {
                         .unitPrice(order.getUnitPrice())
                         .fio(order.getCustomer().getFio())
                         .clothesType(order.getClothesType())
+                        .totalCost(order.getTotalCost())
                         .build()).collect(Collectors.toList());
     }
+
+    @Override
+    public Long returnNewOrdersCount(){
+        return orderRepository.countByNewOrderIsTrue();
+    }
+
 }

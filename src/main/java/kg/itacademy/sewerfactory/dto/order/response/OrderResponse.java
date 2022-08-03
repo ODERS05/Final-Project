@@ -3,6 +3,8 @@ package kg.itacademy.sewerfactory.dto.order.response;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +22,8 @@ public class OrderResponse {
     String status;
 
     Boolean newOrder;
+
+    BigDecimal totalCost;
 
     String fio;
 }
