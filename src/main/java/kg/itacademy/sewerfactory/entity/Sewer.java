@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.entity;
 
+import kg.itacademy.sewerfactory.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -53,7 +54,8 @@ public class Sewer{
     Order order;
 
     @Column(name = "status", nullable = false)
-    String status;
+    @Enumerated(EnumType.STRING)
+    Status status;
 
     @ManyToOne
     @JoinColumn(name = "department_id", nullable = false)

@@ -17,4 +17,6 @@ public class UserResponse {
     String email;
 
     Roles role;
+
+    String token;
 }

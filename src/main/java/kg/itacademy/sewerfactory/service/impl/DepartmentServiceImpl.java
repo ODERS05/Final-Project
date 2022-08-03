@@ -7,6 +7,7 @@ import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
 import kg.itacademy.sewerfactory.entity.Department;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.Sewer;
+import kg.itacademy.sewerfactory.enums.Status;
 import kg.itacademy.sewerfactory.exception.NotUniqueDepartment;
 import kg.itacademy.sewerfactory.exception.OrderNotFoundException;
 import kg.itacademy.sewerfactory.mapper.DepartmentMapper;
@@ -68,7 +69,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Boolean updateDepartment(DepartmentUpdateRequest t){
         Department department = departmentRepository.getById(t.getId());
-        Order order = orderRepository.getById(t.getOrderId());
+        Order order = null;
+        if(t.getOrderId()!=null){
+             order = orderRepository.getById(t.getOrderId());
+            order.setStatus(t.getStatus());
+        }
         department.setDepartmentName(t.getDepartmentName());
         department.setOrder(order);
         departmentRepository.save(department);

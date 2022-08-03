@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.dto.department.request;
 
+import kg.itacademy.sewerfactory.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -14,4 +15,6 @@ public class DepartmentUpdateRequest {
     String departmentName;
 
     Long orderId;
+
+    Status status;
 }

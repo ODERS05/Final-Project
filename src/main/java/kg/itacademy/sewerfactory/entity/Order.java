@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.entity;
 
+import kg.itacademy.sewerfactory.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -31,7 +32,8 @@ public class Order extends BaseEntity{
     Integer unitPrice;
 
     @Column(name = "status", nullable = false)
-    String status;
+    @Enumerated(EnumType.STRING)
+    Status status;
 
     @Column(name = "new_order", nullable = false)
     Boolean newOrder;

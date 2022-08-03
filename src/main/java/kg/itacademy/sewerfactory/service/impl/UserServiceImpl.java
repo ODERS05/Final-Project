@@ -11,6 +11,7 @@ import kg.itacademy.sewerfactory.enums.Roles;
 import kg.itacademy.sewerfactory.exception.NotUniqueRecord;
 import kg.itacademy.sewerfactory.exception.UserSignInException;
 import kg.itacademy.sewerfactory.mapper.UserMapper;
+import kg.itacademy.sewerfactory.model.AuthModel;
 import kg.itacademy.sewerfactory.repository.RoleRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.repository.UserRoleRepository;
@@ -62,7 +63,8 @@ public class UserServiceImpl implements UserService {
                     .role(t.getRole())
                     .email(user.getEmail())
                     .id(user.getId())
-                    .login(user.getLogin()).build();
+                    .login(user.getLogin())
+                    .token(getToken(t.getLogin(),t.getPassword())).build();
         } catch (Exception ignored) {
             throw new NotUniqueRecord("Не уникальный логин", HttpStatus.BAD_REQUEST);
         }
@@ -80,15 +82,26 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String getToken(UserAuthRequest request) throws UserSignInException {
+    public AuthModel auth(UserAuthRequest request) throws UserSignInException {
         User user = userRepository.findByLoginOrEmail(request.getEmail());
+        UserRole userRole = userRoleRepository.findByUser(user);
         boolean isMatches = passwordEncoder.matches(request.getPassword(), user.getPassword());
         if (isMatches) {
-            return "Basic " + new String(Base64.getEncoder()
-                    .encode((user.getLogin() + ":" + request.getPassword()).getBytes()));
+            return AuthModel.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .login(user.getLogin())
+                    .roles(userRole.getRole().getRoles())
+                    .token(getToken(user.getLogin(), request.getPassword()))
+                    .build();
         } else {
             throw new UserSignInException("Неправильный логин или пароль!", HttpStatus.NOT_FOUND);
         }
+    }
+
+    private String getToken(String login, String password) {
+        return "Basic " + new String(Base64.getEncoder()
+                .encode((login + ":" + password).getBytes()));
     }
 
 

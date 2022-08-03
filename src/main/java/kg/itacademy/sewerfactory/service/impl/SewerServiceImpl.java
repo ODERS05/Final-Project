@@ -11,6 +11,7 @@ import kg.itacademy.sewerfactory.entity.Department;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.Sewer;
 import kg.itacademy.sewerfactory.entity.User;
+import kg.itacademy.sewerfactory.enums.Status;
 import kg.itacademy.sewerfactory.exception.DepartmentNotFoundException;
 import kg.itacademy.sewerfactory.exception.ImpossibleCaseException;
 import kg.itacademy.sewerfactory.exception.OrderNotFoundException;
@@ -50,7 +51,7 @@ public class SewerServiceImpl implements SewerService {
                 .phoneNumber(t.getPhoneNumber())
                 .fio(t.getFio())
                 .user(user)
-                .status("Waiting")
+                .status(Status.WAITING)
                 .build());
         DepartmentResponse departmentResponse = DepartmentResponse.builder()
                 .departmentName(department.getDepartmentName())
@@ -125,10 +126,10 @@ public class SewerServiceImpl implements SewerService {
     @Override//доработать
     public BigDecimal countSewerSalary(Long id){
         Sewer sewer = sewerRepository.getById(id);
-        if (sewer.getStatus().equals("Done")) {
+        if (sewer.getStatus().equals(Status.DONE)) {
             BigDecimal salary = BigDecimal.valueOf(sewer.getNeedAmount() * sewer.getOrder().getUnitPrice());
             sewer.setNeedAmount(0L);
-            sewer.setStatus("Waiting");
+            sewer.setStatus(Status.WAITING);
             sewerRepository.save(sewer);
             return salary;
         } else return null;

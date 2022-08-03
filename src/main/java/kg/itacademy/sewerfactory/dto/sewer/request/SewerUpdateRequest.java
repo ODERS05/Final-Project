@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.dto.sewer.request;
 
+import kg.itacademy.sewerfactory.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -19,7 +20,7 @@ public class SewerUpdateRequest {
 
     Long orderId;
 
-    String status;
+    Status status;
 
     String departmentName;
 

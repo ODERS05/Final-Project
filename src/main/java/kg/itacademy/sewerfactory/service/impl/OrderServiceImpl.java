@@ -5,6 +5,7 @@ import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
 import kg.itacademy.sewerfactory.entity.Customer;
 import kg.itacademy.sewerfactory.entity.Order;
+import kg.itacademy.sewerfactory.enums.Status;
 import kg.itacademy.sewerfactory.exception.CustomerNotFoundException;
 import kg.itacademy.sewerfactory.mapper.OrderMapper;
 import kg.itacademy.sewerfactory.repository.CustomerRepository;
@@ -35,7 +36,7 @@ public class OrderServiceImpl implements OrderService {
                 .clothesType(t.getClothesType())
                 .amount(t.getAmount())
                 .unitPrice(t.getUnitPrice())
-                .status("Waiting")
+                .status(Status.WAITING)
                 .newOrder(true)
                 .customer(customer)
                 .totalCost(totalCost)

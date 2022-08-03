@@ -4,6 +4,7 @@ import kg.itacademy.sewerfactory.dto.user.request.UserAuthRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserUpdateRequest;
 import kg.itacademy.sewerfactory.dto.user.response.UserResponse;
+import kg.itacademy.sewerfactory.model.AuthModel;
 import kg.itacademy.sewerfactory.service.UserService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -28,8 +29,8 @@ public class UserController {
 
     @SneakyThrows
     @PostMapping("/auth")
-    public String auto(@RequestBody UserAuthRequest request) {
-        return userService.getToken(request);
+    public AuthModel auto(@RequestBody UserAuthRequest request) {
+        return userService.auth(request);
     }
 
     @GetMapping

@@ -1,4 +1,5 @@
 package kg.itacademy.sewerfactory.dto.sewer.response;
+import kg.itacademy.sewerfactory.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -22,7 +23,7 @@ public class SewerResponse {
 
     Integer unitPrice;
 
-    String status;
+    Status status;
 
     String departmentName;
 
