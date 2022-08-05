@@ -15,6 +15,7 @@ import java.util.List;
 @RequestMapping("/api/role")
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@CrossOrigin(origins = "*", maxAge = 8600)
 public class RoleController {
     final RoleService roleService;
 
