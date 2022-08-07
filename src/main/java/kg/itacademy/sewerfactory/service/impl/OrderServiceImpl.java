@@ -7,7 +7,6 @@ import kg.itacademy.sewerfactory.entity.Customer;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.enums.Status;
 import kg.itacademy.sewerfactory.exception.CustomerNotFoundException;
-import kg.itacademy.sewerfactory.mapper.OrderMapper;
 import kg.itacademy.sewerfactory.repository.CustomerRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
 import kg.itacademy.sewerfactory.service.OrderService;
@@ -97,12 +96,24 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Boolean updateOrder(OrderUpdateRequest t) {
         Order order = orderRepository.getById(t.getId());
-        order.setNewOrder(t.getNewOrder());
-        order.setUnitPrice(t.getUnitPrice());
-        order.setAmount(t.getAmount());
-        order.setClothesType(t.getClothesType());
-        order.setStatus(t.getStatus());
-        order.setDescription(t.getDescription());
+        if (t.getNewOrder() != null){
+            order.setNewOrder(t.getNewOrder());
+        }
+        if (t.getUnitPrice() != null){
+            order.setUnitPrice(t.getUnitPrice());
+        }
+        if (t.getAmount() != null){
+            order.setAmount(t.getAmount());
+        }
+        if (t.getClothesType()!= null){
+            order.setClothesType(t.getClothesType());
+        }
+        if (t.getStatus() != null){
+            order.setStatus(t.getStatus());
+        }
+        if (t.getDescription() != null){
+            order.setDescription(t.getDescription());
+        }
         orderRepository.save(order);
         return order.getId() != null;
     }

@@ -59,7 +59,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentResponse findById(Long id) {
-        return DepartmentMapper.INSTANCE.toDepartmentResponse(departmentRepository.getById(id));
+        Department department = departmentRepository.getById(id);
+        return DepartmentResponse.builder()
+                .departmentStatus(department.getDepartmentStatus())
+                .departmentName(department.getDepartmentName())
+                .clothType(department.getOrder() == null ? null : department.getOrder().getClothesType())
+                .status(department.getOrder() == null ? null :department.getOrder().getStatus())
+                .amount(department.getOrder() == null ? null : department.getOrder().getAmount())
+                .unitPrice(department.getOrder() == null ? null : department.getOrder().getUnitPrice())
+                .description(department.getOrder() == null ? null : department.getOrder().getDescription())
+                .id(department.getId()).build();
     }
 
     @Override
