@@ -116,10 +116,16 @@ public class SewerServiceImpl implements SewerService {
             sewer.setOrder(null);
             sewer.setNeedAmount(0L);
         }
-        sewer.setStatus(t.getStatus());
+        if (t.getStatus() != null){
+            sewer.setStatus(t.getStatus());
+        }
         sewer.setDepartment(department);
-        sewer.setFio(t.getFio());
-        sewer.setPhoneNumber(t.getPhoneNumber());
+        if (t.getFio() != null){
+            sewer.setFio(t.getFio());
+        }
+        if (t.getPhoneNumber() != null){
+            sewer.setPhoneNumber(t.getPhoneNumber());
+        }
         if (sewer.getOrder() != null){
             if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > Objects.requireNonNull(order).getAmount()){
                 throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
