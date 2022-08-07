@@ -22,5 +22,5 @@ public class SewerUpdateRequest {
 
     Status status;
 
-    Long departmentId;
+    String departmentName;
 }

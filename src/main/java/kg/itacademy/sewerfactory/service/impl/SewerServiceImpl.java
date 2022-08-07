@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -104,23 +105,25 @@ public class SewerServiceImpl implements SewerService {
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
         Order order = null;
-        if (t.getOrderId() != null){
+        if (t.getOrderId() != null && t.getOrderId() != 0){
             order = orderRepository.getById(t.getOrderId());
         }
-        Department department = departmentRepository.getById(t.getDepartmentId());
+        Department department = departmentRepository.findByDepartmentName(t.getDepartmentName());
         if (department.getOrder() != null){
             sewer.setOrder(order);
             sewer.setNeedAmount(t.getNeedAmount());
         }else {
             sewer.setOrder(null);
-            sewer.setNeedAmount(null);
+            sewer.setNeedAmount(0L);
         }
         sewer.setStatus(t.getStatus());
         sewer.setDepartment(department);
         sewer.setFio(t.getFio());
         sewer.setPhoneNumber(t.getPhoneNumber());
-        if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > order.getAmount()){
-            throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
+        if (sewer.getOrder() != null){
+            if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > Objects.requireNonNull(order).getAmount()){
+                throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
+            }
         }
         sewerRepository.save(sewer);
         return sewer.getId() != null;
