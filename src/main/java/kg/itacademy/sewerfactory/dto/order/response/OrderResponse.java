@@ -26,5 +26,7 @@ public class OrderResponse {
 
     BigDecimal totalCost;
 
+    String description;
+
     String fio;
 }

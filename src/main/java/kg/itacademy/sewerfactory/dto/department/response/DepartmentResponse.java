@@ -23,6 +23,8 @@ public class DepartmentResponse {
 
     Status status;
 
+    String description;
+
     String departmentName;
 
     Status departmentStatus;

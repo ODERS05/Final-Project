@@ -53,6 +53,7 @@ public class DepartmentServiceImpl implements DepartmentService {
                         .status(department.getOrder() == null ? null :department.getOrder().getStatus())
                         .amount(department.getOrder() == null ? null : department.getOrder().getAmount())
                         .unitPrice(department.getOrder() == null ? null : department.getOrder().getUnitPrice())
+                        .description(department.getOrder() == null ? null : department.getOrder().getDescription())
                         .id(department.getId()).build()).collect(Collectors.toList());
     }
 

@@ -36,6 +36,7 @@ public class OrderServiceImpl implements OrderService {
                 .clothesType(t.getClothesType())
                 .amount(t.getAmount())
                 .unitPrice(t.getUnitPrice())
+                .description(t.getDescription())
                 .status(Status.WAITING)
                 .newOrder(true)
                 .customer(customer)
@@ -66,6 +67,7 @@ public class OrderServiceImpl implements OrderService {
                         .status(order.getStatus())
                         .amount(order.getAmount())
                         .totalCost(order.getTotalCost())
+                        .description(order.getDescription())
                 .build()).collect(Collectors.toList());
     }
 
@@ -81,6 +83,7 @@ public class OrderServiceImpl implements OrderService {
                 .newOrder(order.getNewOrder())
                 .id(order.getId())
                 .amount(order.getAmount())
+                .description(order.getDescription())
                 .build();
     }
 
@@ -99,6 +102,7 @@ public class OrderServiceImpl implements OrderService {
         order.setAmount(t.getAmount());
         order.setClothesType(t.getClothesType());
         order.setStatus(t.getStatus());
+        order.setDescription(t.getDescription());
         orderRepository.save(order);
         return order.getId() != null;
     }
@@ -115,6 +119,7 @@ public class OrderServiceImpl implements OrderService {
                         .fio(order.getCustomer().getFio())
                         .clothesType(order.getClothesType())
                         .totalCost(order.getTotalCost())
+                        .description(order.getDescription())
                         .build()).collect(Collectors.toList());
     }
 

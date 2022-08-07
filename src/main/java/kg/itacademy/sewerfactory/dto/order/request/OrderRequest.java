@@ -18,4 +18,6 @@ public class OrderRequest {
     Integer unitPrice;
 
     Boolean newOrder;
+
+    String description;
 }

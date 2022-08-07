@@ -40,4 +40,7 @@ public class Order extends BaseEntity{
 
     @Column(name = "total_cost", nullable = false)
     BigDecimal totalCost;
+
+    @Column(name = "description")
+    String description;
 }

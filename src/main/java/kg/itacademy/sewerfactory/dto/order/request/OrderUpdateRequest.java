@@ -22,5 +22,7 @@ public class OrderUpdateRequest {
 
     Status status;
 
+    String description;
+
     Boolean newOrder;
 }
