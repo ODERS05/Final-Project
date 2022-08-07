@@ -82,7 +82,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Boolean updateDepartment(DepartmentUpdateRequest t){
         Department department = departmentRepository.getById(t.getId());
         Order order = null;
-        if(t.getOrderId()!= 0 && t.getOrderId() != null){
+        if(t.getOrderId() != null){
             order = orderRepository.getById(t.getOrderId());
             order.setStatus(Status.INPROCESS);
         }
