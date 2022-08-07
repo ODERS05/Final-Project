@@ -1,5 +1,6 @@
 package kg.itacademy.sewerfactory.entity;
 
+import kg.itacademy.sewerfactory.enums.Status;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -20,4 +21,8 @@ public class Department extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "order_id")
     Order order;
+
+    @Column(name = "department_status", nullable = false)
+    @Enumerated(EnumType.STRING)
+    Status departmentStatus;
 }

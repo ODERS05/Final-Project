@@ -2,20 +2,15 @@ package kg.itacademy.sewerfactory.service.impl;
 
 
 import kg.itacademy.sewerfactory.dto.department.response.DepartmentResponse;
-import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
 import kg.itacademy.sewerfactory.dto.sewer.request.SewerRequest;
 import kg.itacademy.sewerfactory.dto.sewer.request.SewerUpdateRequest;
 import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
-import kg.itacademy.sewerfactory.dto.user.request.UserRequest;
 import kg.itacademy.sewerfactory.entity.Department;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.Sewer;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.enums.Status;
-import kg.itacademy.sewerfactory.exception.DepartmentNotFoundException;
-import kg.itacademy.sewerfactory.exception.ImpossibleCaseException;
-import kg.itacademy.sewerfactory.exception.OrderNotFoundException;
-import kg.itacademy.sewerfactory.exception.UserNotFoundException;
+import kg.itacademy.sewerfactory.exception.*;
 import kg.itacademy.sewerfactory.repository.DepartmentRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
 import kg.itacademy.sewerfactory.repository.SewerRepository;
@@ -28,7 +23,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -109,12 +103,21 @@ public class SewerServiceImpl implements SewerService {
     @Override
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
-        Order order = orderRepository.getById(t.getOrderId());
+        Order order = null;
+        if (t.getOrderId() != null){
+            order = orderRepository.getById(t.getOrderId());
+        }
+        Department department = departmentRepository.getById(t.getDepartmentId());
+        if (department.getOrder() != null){
+            sewer.setOrder(order);
+            sewer.setNeedAmount(t.getNeedAmount());
+        }else {
+            sewer.setOrder(null);
+            sewer.setNeedAmount(null);
+        }
         sewer.setStatus(t.getStatus());
-        sewer.setDepartment(Department.builder().departmentName(t.getDepartmentName()).build());
-        sewer.setNeedAmount(t.getNeedAmount());
+        sewer.setDepartment(department);
         sewer.setFio(t.getFio());
-        sewer.setOrder(order);
         sewer.setPhoneNumber(t.getPhoneNumber());
         if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > order.getAmount()){
             throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
@@ -132,7 +135,7 @@ public class SewerServiceImpl implements SewerService {
             sewer.setStatus(Status.WAITING);
             sewerRepository.save(sewer);
             return salary;
-        } else return null;
+        } else throw new NotFinishWorkException("Ещё не закончила работу", HttpStatus.BAD_REQUEST);
     }
 
     @Override

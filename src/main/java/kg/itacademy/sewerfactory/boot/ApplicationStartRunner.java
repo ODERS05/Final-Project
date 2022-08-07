@@ -1,7 +1,7 @@
 package kg.itacademy.sewerfactory.boot;
 
-import kg.itacademy.sewerfactory.entity.Role;
-import kg.itacademy.sewerfactory.enums.Roles;
+import kg.itacademy.sewerfactory.entity.Department;
+import kg.itacademy.sewerfactory.repository.DepartmentRepository;
 import kg.itacademy.sewerfactory.repository.RoleRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.repository.UserRoleRepository;
@@ -13,11 +13,13 @@ public class ApplicationStartRunner implements CommandLineRunner {
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
     private final UserRoleRepository userRoleRepository;
+    private final DepartmentRepository departmentRepository;
 
-    public ApplicationStartRunner(RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository) {
+    public ApplicationStartRunner(RoleRepository roleRepository, UserRepository userRepository, UserRoleRepository userRoleRepository, DepartmentRepository departmentRepository) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.userRoleRepository = userRoleRepository;
+        this.departmentRepository = departmentRepository;
     }
 
     @Override

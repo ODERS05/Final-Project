@@ -12,5 +12,6 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class DepartmentRequest {
     Long orderId;
+
     String departmentName;
 }

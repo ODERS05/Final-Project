@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     final CustomerRepository customerRepository;
     final UserRepository userRepository;
-    final UserService userService;
     @Override
     public CustomerResponse save(CustomerRequest t) {
         try {

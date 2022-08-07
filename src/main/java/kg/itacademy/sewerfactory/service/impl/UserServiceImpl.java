@@ -5,6 +5,8 @@ import kg.itacademy.sewerfactory.dto.user.request.UserAuthRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserRequest;
 import kg.itacademy.sewerfactory.dto.user.request.UserUpdateRequest;
 import kg.itacademy.sewerfactory.dto.user.response.UserResponse;
+import kg.itacademy.sewerfactory.entity.Customer;
+import kg.itacademy.sewerfactory.entity.Sewer;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.entity.UserRole;
 import kg.itacademy.sewerfactory.enums.Roles;
@@ -12,9 +14,9 @@ import kg.itacademy.sewerfactory.exception.NotUniqueRecord;
 import kg.itacademy.sewerfactory.exception.UserSignInException;
 import kg.itacademy.sewerfactory.mapper.UserMapper;
 import kg.itacademy.sewerfactory.model.AuthModel;
-import kg.itacademy.sewerfactory.repository.RoleRepository;
-import kg.itacademy.sewerfactory.repository.UserRepository;
-import kg.itacademy.sewerfactory.repository.UserRoleRepository;
+import kg.itacademy.sewerfactory.repository.*;
+import kg.itacademy.sewerfactory.service.CustomerService;
+import kg.itacademy.sewerfactory.service.SewerService;
 import kg.itacademy.sewerfactory.service.UserService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -41,6 +43,10 @@ public class UserServiceImpl implements UserService {
 
     final UserRoleRepository userRoleRepository;
 
+    final CustomerService customerService;
+
+    final SewerService sewerService;
+
     @Override
     public UserResponse save(UserRequest t) {
         try {
@@ -53,6 +59,7 @@ public class UserServiceImpl implements UserService {
                     .build());
             UserRole userRole = new UserRole();
             userRole.setUser(userRepository.save(user));
+            userRole.setId(user.getId());
             if (t.getRole().equals(Roles.ROLE_CUSTOMER)) {
                 userRole.setRole(roleRepository.findById(1L).get());
             } else {
@@ -133,6 +140,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse delete(Long id) {
         User user = userRepository.getById(id);
+        customerService.delete(user.getId());
+        sewerService.delete(user.getId());
+        userRoleRepository.deleteByUserId(user.getId());
         userRepository.delete(user);
         return UserResponse.builder().build();
     }

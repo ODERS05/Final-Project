@@ -16,5 +16,5 @@ public class DepartmentUpdateRequest {
 
     Long orderId;
 
-    Status status;
+    Status departmentStatus;
 }

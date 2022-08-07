@@ -43,7 +43,7 @@ public class Sewer{
     @Column(name = "fio", nullable = false, unique = true)
     String fio;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", nullable = false, unique = true, length = 10)
     String phoneNumber;
 
     @Column(name = "need_amount")
