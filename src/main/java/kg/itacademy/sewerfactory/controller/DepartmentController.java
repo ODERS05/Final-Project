@@ -34,7 +34,8 @@ public class DepartmentController {
     }
 
     @PutMapping("/{id}")
-    public Boolean updateDepartment(@RequestBody DepartmentUpdateRequest request){
+    public Boolean updateDepartment(@RequestBody DepartmentUpdateRequest request, @PathVariable Long id){
+        request.setId(id);
         return departmentService.updateDepartment(request);
     }
 

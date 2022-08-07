@@ -128,4 +128,13 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.countByNewOrderIsTrue();
     }
 
+    @Override
+    public Boolean deleteAllOrdersByCustomerId(Long id) {
+        List<Order> orders = orderRepository.findAllOrdersByCustomerId(id);
+        for (Order order : orders) {
+            orderRepository.delete(order);
+        }
+        return true;
+    }
+
 }

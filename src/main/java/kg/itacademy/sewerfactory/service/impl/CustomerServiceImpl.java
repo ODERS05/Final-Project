@@ -9,8 +9,10 @@ import kg.itacademy.sewerfactory.exception.NotUniqueCustomer;
 import kg.itacademy.sewerfactory.exception.UserNotFoundException;
 import kg.itacademy.sewerfactory.mapper.CustomerMapper;
 import kg.itacademy.sewerfactory.repository.CustomerRepository;
+import kg.itacademy.sewerfactory.repository.OrderRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.service.CustomerService;
+import kg.itacademy.sewerfactory.service.OrderService;
 import kg.itacademy.sewerfactory.service.UserService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,6 +29,8 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     final CustomerRepository customerRepository;
     final UserRepository userRepository;
+    final OrderService orderService;
+    final OrderRepository orderRepository;
     @Override
     public CustomerResponse save(CustomerRequest t) {
         try {
@@ -85,6 +89,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse delete(Long id) {
         Customer customer = customerRepository.getById(id);
+        orderService.deleteAllOrdersByCustomerId(id);
         customerRepository.delete(customer);
         return CustomerResponse.builder().build();
     }

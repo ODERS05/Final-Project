@@ -71,15 +71,16 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public Boolean updateDepartment(DepartmentUpdateRequest t){
-        Department department = departmentRepository.findByDepartmentName(t.getDepartmentName());
+        Department department = departmentRepository.getById(t.getId());
         Order order = null;
         if(t.getOrderId()!= 0 && t.getOrderId() != null){
             order = orderRepository.getById(t.getOrderId());
             order.setStatus(Status.INPROCESS);
         }
-        department.setDepartmentName(t.getDepartmentName());
         department.setOrder(order);
-        department.setDepartmentStatus(t.getDepartmentStatus());
+        if (t.getDepartmentStatus() != null){
+            department.setDepartmentStatus(t.getDepartmentStatus());
+        }
         departmentRepository.save(department);
         return department.getId() != null;
     }

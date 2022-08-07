@@ -13,4 +13,6 @@ public interface OrderService extends BaseService<OrderResponse, OrderRequest> {
     List<OrderResponse> getAllOrdersByCustomerId(Long id);
 
     Long returnNewOrdersCount();
+
+    Boolean deleteAllOrdersByCustomerId(Long id);
 }
