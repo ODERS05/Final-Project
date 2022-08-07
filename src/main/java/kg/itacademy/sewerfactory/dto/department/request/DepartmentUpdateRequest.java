@@ -15,6 +15,4 @@ public class DepartmentUpdateRequest {
     String departmentName;
 
     Long orderId;
-
-    Status departmentStatus;
 }

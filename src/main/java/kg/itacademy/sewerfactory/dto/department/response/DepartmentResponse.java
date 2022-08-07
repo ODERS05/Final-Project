@@ -26,7 +26,5 @@ public class DepartmentResponse {
     String description;
 
     String departmentName;
-
-    Status departmentStatus;
 }
 

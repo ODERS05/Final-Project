@@ -31,12 +31,10 @@ public class DepartmentServiceImpl implements DepartmentService {
         try {
             Department department = departmentRepository.save(Department.builder()
                     .departmentName(t.getDepartmentName())
-                    .departmentStatus(Status.WAITING)
                     .build());
             return DepartmentResponse.builder()
                     .id(department.getId())
                     .departmentName(t.getDepartmentName())
-                    .departmentStatus(department.getDepartmentStatus())
                     .build();
         }catch (Exception ignored){
             throw  new NotUniqueDepartment("Одиннаковое название отделов", HttpStatus.BAD_REQUEST);
@@ -47,7 +45,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     public List<DepartmentResponse> getAll() {
         return departmentRepository.findAll().stream()
                 .map(department -> DepartmentResponse.builder()
-                        .departmentStatus(department.getDepartmentStatus())
                         .departmentName(department.getDepartmentName())
                         .clothType(department.getOrder() == null ? null : department.getOrder().getClothesType())
                         .status(department.getOrder() == null ? null :department.getOrder().getStatus())
@@ -61,7 +58,6 @@ public class DepartmentServiceImpl implements DepartmentService {
     public DepartmentResponse findById(Long id) {
         Department department = departmentRepository.getById(id);
         return DepartmentResponse.builder()
-                .departmentStatus(department.getDepartmentStatus())
                 .departmentName(department.getDepartmentName())
                 .clothType(department.getOrder() == null ? null : department.getOrder().getClothesType())
                 .status(department.getOrder() == null ? null :department.getOrder().getStatus())
@@ -89,9 +85,6 @@ public class DepartmentServiceImpl implements DepartmentService {
         department.setOrder(order);
         if (t.getDepartmentName() != null){
             department.setDepartmentName(t.getDepartmentName());
-        }
-        if (t.getDepartmentStatus() != null){
-            department.setDepartmentStatus(t.getDepartmentStatus());
         }
         departmentRepository.save(department);
         return department.getId() != null;

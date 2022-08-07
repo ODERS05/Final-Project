@@ -21,8 +21,4 @@ public class Department extends BaseEntity{
     @ManyToOne
     @JoinColumn(name = "order_id")
     Order order;
-
-    @Column(name = "department_status", nullable = false)
-    @Enumerated(EnumType.STRING)
-    Status departmentStatus;
 }
