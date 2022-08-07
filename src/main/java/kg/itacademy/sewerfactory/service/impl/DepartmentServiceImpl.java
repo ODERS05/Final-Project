@@ -87,6 +87,9 @@ public class DepartmentServiceImpl implements DepartmentService {
             order.setStatus(Status.INPROCESS);
         }
         department.setOrder(order);
+        if (t.getDepartmentName() != null){
+            department.setDepartmentName(t.getDepartmentName());
+        }
         if (t.getDepartmentStatus() != null){
             department.setDepartmentStatus(t.getDepartmentStatus());
         }
