@@ -81,14 +81,14 @@ public class SewerServiceImpl implements SewerService {
     public SewerResponse findById(Long id) {
         Sewer sewer = sewerRepository.getById(id);
         return SewerResponse.builder()
-                .id(sewer.getId())
-                .fio(sewer.getFio())
-                .phoneNumber(sewer.getPhoneNumber())
-                .clothesType(sewer.getOrder().getClothesType())
-                .needAmount(sewer.getNeedAmount())
-                .departmentName(sewer.getDepartment().getDepartmentName())
                 .status(sewer.getStatus())
-                .unitPrice(sewer.getOrder().getUnitPrice())
+                .phoneNumber(sewer.getPhoneNumber())
+                .unitPrice(sewer.getOrder() == null ? null : sewer.getOrder().getUnitPrice())
+                .id(sewer.getId())
+                .departmentName(sewer.getDepartment().getDepartmentName())
+                .needAmount(sewer.getNeedAmount())
+                .fio(sewer.getFio())
+                .clothesType(sewer.getOrder() == null ? null : sewer.getOrder().getClothesType())
                 .email(sewer.getUser().getEmail())
                 .build();
 
