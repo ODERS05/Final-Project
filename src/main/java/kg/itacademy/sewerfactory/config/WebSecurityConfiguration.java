@@ -31,13 +31,20 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource)
                 .usersByUsernameQuery("SELECT t.user_name, t.password, t.is_active FROM users t WHERE t.user_name = ?")
                 .authoritiesByUsernameQuery(
-                        "SELECT u.user_name, ur.name_role" +
-                                "FROM user_role ur" +
-                                "INNER JOIN users u " +
-                                "on ur.user_id = u.id" +
-                                "INNER JOIN roles r" +
-                                "on ur.role_id = r.id" +
-                                "WHERE u.user_name = ? AND u.is_active = 1");
+                        "select\n" +
+                                "\tu.user_name,\n" +
+                                "\tr.roles\n" +
+                                "from\n" +
+                                "\tuser_role ur\n" +
+                                "inner join users u \n" +
+                                "                                on\n" +
+                                "\tur.user_id = u.id\n" +
+                                "inner join role r\n" +
+                                "                                on\n" +
+                                "\tur.role_id = r.id\n" +
+                                "where\n" +
+                                "\tu.user_name = ?\n" +
+                                "\tand u.is_active = true");
     }
 
     @Override
@@ -48,8 +55,11 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .and()
                 .csrf().disable()
                 .authorizeRequests()
+
                 .antMatchers(HttpMethod.POST, "users/register").permitAll()
                 .antMatchers(HttpMethod.POST, "users/auto").permitAll()
+                .antMatchers(HttpMethod.GET, "users/find-user").authenticated()
+
                 .and()
                 .httpBasic();
     }
