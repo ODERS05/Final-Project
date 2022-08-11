@@ -3,6 +3,7 @@ package kg.itacademy.sewerfactory.controller;
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
+import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.service.OrderService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -54,8 +55,4 @@ public class OrderController {
         return orderService.returnNewOrdersCount();
     }
 
-    @DeleteMapping("/delete-customer-orders/{id}")
-    public Boolean deleteAllOrdersByCustomerId(Long id){
-        return orderService.deleteAllOrdersByCustomerId(id);
-    }
 }
