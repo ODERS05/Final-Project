@@ -13,6 +13,7 @@ import kg.itacademy.sewerfactory.exception.*;
 import kg.itacademy.sewerfactory.repository.DepartmentRepository;
 import kg.itacademy.sewerfactory.repository.SewerRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
+import kg.itacademy.sewerfactory.service.MailSenderService;
 import kg.itacademy.sewerfactory.service.SewerService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -32,6 +33,7 @@ public class SewerServiceImpl implements SewerService {
     final SewerRepository sewerRepository;
     final DepartmentRepository departmentRepository;
     final UserRepository userRepository;
+    final MailSenderService mailSenderService;
 
     @Override
     public SewerResponse save(SewerRequest t) {
@@ -137,6 +139,7 @@ public class SewerServiceImpl implements SewerService {
             sewer.setNeedAmount(0L);
             sewer.setStatus(Status.WAITING);
             sewerRepository.save(sewer);
+            mailSenderService.sendMail(sewer.getUser().getEmail());
             return salary;
         } else throw new NotFinishWorkException("Ещё не закончила работу", HttpStatus.BAD_REQUEST);
     }
