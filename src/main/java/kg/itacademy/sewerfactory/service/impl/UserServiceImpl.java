@@ -85,7 +85,12 @@ public class UserServiceImpl implements UserService {
                         .getContext()
                         .getAuthentication()
                         .getName());
-        return UserMapper.INSTANCE.toUserResponse(user);
+        UserRole userRole = userRoleRepository.findByUser(user);
+        return UserResponse.builder()
+                .id(user.getId())
+                .role(userRole.getRole().getRoles())
+                .login(user.getLogin())
+                .email(user.getEmail()).build();
     }
 
     @Override
