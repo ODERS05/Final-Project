@@ -30,7 +30,7 @@ public class CustomerServiceImpl implements CustomerService {
     final CustomerRepository customerRepository;
     final UserRepository userRepository;
     final OrderService orderService;
-    final OrderRepository orderRepository;
+
     @Override
     public CustomerResponse save(CustomerRequest t) {
         try {
@@ -40,6 +40,7 @@ public class CustomerServiceImpl implements CustomerService {
                     .fio(t.getFio())
                     .phoneNumber(t.getPhoneNumber())
                     .user(user)
+                    .isActive(true)
                     .build());
             customerRepository.save(customer);
             return CustomerResponse.builder()
@@ -80,6 +81,9 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Boolean updateCustomer(CustomerUpdateRequest t) {
         Customer customer = customerRepository.getById(t.getId());
+        if (!customer.getIsActive()){
+            return false;
+        }
         customer.setFio(t.getFio());
         customer.setPhoneNumber(t.getPhoneNumber());
         customerRepository.save(customer);

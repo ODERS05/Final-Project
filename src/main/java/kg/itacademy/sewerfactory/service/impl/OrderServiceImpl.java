@@ -66,6 +66,7 @@ public class OrderServiceImpl implements OrderService {
                         .status(order.getStatus())
                         .amount(order.getAmount())
                         .totalCost(order.getTotalCost())
+                        .customerId(order.getCustomer().getId())
                         .description(order.getDescription())
                 .build()).collect(Collectors.toList());
     }
@@ -83,6 +84,7 @@ public class OrderServiceImpl implements OrderService {
                 .id(order.getId())
                 .amount(order.getAmount())
                 .description(order.getDescription())
+                .customerId(order.getCustomer().getId())
                 .build();
     }
 

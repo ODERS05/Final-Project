@@ -45,4 +45,7 @@ public class Customer {
 
     @Column(name = "phone_number", nullable = false, unique = true, length = 10)
     String phoneNumber;
+
+    @Column(name = "is_active")
+    Boolean isActive;
 }

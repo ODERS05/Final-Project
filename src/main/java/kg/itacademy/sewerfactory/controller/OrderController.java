@@ -38,10 +38,12 @@ public class OrderController {
         request.setId(id);
         return orderService.updateOrder(request);
     }
+
     @GetMapping("/get-customer-orders/{id}")
     public List<OrderResponse> getAllOrdersByCustomerId(@PathVariable Long id){
         return orderService.getAllOrdersByCustomerId(id);
     }
+
     @DeleteMapping("/{id}")
     public OrderResponse delete(@PathVariable Long id){
         return orderService.delete(id);
@@ -50,5 +52,10 @@ public class OrderController {
     @GetMapping("/count-new-orders")
     public Long returnNewOrdersCount(){
         return orderService.returnNewOrdersCount();
+    }
+
+    @DeleteMapping("/delete-customer-orders/{id}")
+    public Boolean deleteAllOrdersByCustomerId(Long id){
+        return orderService.deleteAllOrdersByCustomerId(id);
     }
 }

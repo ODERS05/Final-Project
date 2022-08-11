@@ -104,17 +104,13 @@ public class SewerServiceImpl implements SewerService {
     @Override
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
-        Order order = null;
+        Department department = departmentRepository.findByDepartmentName(sewer.getDepartment().getDepartmentName());
         if (t.getOrderId() != null && t.getOrderId() != 0){
-            order = orderRepository.getById(t.getOrderId());
-        }
-        Department department = departmentRepository.findByDepartmentName(t.getDepartmentName());
-        if (department.getOrder() != null){
-            sewer.setOrder(order);
-            sewer.setNeedAmount(t.getNeedAmount());
-        }else {
-            sewer.setOrder(null);
-            sewer.setNeedAmount(0L);
+            if (department.getOrder() != null){
+                sewer.setOrder(department.getOrder());
+                sewer.setNeedAmount(t.getNeedAmount());
+                sewer.setStatus(Status.INPROCESS);
+            }
         }
         if (t.getStatus() != null){
             sewer.setStatus(t.getStatus());
@@ -127,7 +123,7 @@ public class SewerServiceImpl implements SewerService {
             sewer.setPhoneNumber(t.getPhoneNumber());
         }
         if (sewer.getOrder() != null){
-            if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > Objects.requireNonNull(order).getAmount()){
+            if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > Objects.requireNonNull(department.getOrder()).getAmount()){
                 throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
             }
         }
@@ -135,11 +131,12 @@ public class SewerServiceImpl implements SewerService {
         return sewer.getId() != null;
     }
 
-    @Override//доработать
+    @Override
     public BigDecimal countSewerSalary(Long id){
         Sewer sewer = sewerRepository.getById(id);
         if (sewer.getStatus().equals(Status.DONE)) {
-            BigDecimal salary = BigDecimal.valueOf(sewer.getNeedAmount() * sewer.getOrder().getUnitPrice());
+            double sewerProfitPercentage = 0.25; // процент от стоимости получаемый швеёй
+            BigDecimal salary = BigDecimal.valueOf(sewer.getNeedAmount() * sewer.getOrder().getUnitPrice() * sewerProfitPercentage);
             sewer.setNeedAmount(0L);
             sewer.setStatus(Status.WAITING);
             sewerRepository.save(sewer);

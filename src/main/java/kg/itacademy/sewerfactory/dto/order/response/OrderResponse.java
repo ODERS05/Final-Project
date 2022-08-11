@@ -29,4 +29,6 @@ public class OrderResponse {
     String description;
 
     String fio;
+
+    Long customerId;
 }
