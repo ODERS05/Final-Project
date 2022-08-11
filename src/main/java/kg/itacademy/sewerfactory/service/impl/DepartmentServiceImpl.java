@@ -84,13 +84,11 @@ public class DepartmentServiceImpl implements DepartmentService {
         if(t.getOrderId() != null && t.getOrderId() != 0){
             order = orderRepository.getById(t.getOrderId());
             order.setStatus(Status.INPROCESS);
-            int sewerCount = 0;
-            for (int i = 0; i < sewers.size(); i++) {
-                sewerCount++;
-            }
+            int sewerCount = sewers.size();
             for (Sewer sewer: sewers){
                 sewer.setOrder(order);
                 sewer.setNeedAmount(order.getAmount() / sewerCount);
+                sewer.setStatus(Status.INPROCESS);
             }
         }
         department.setOrder(order);
