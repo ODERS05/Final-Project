@@ -5,11 +5,12 @@ import kg.itacademy.sewerfactory.dto.department.request.DepartmentUpdateRequest;
 import kg.itacademy.sewerfactory.dto.department.response.DepartmentResponse;
 import kg.itacademy.sewerfactory.entity.Department;
 import kg.itacademy.sewerfactory.entity.Order;
+import kg.itacademy.sewerfactory.entity.Sewer;
 import kg.itacademy.sewerfactory.enums.Status;
 import kg.itacademy.sewerfactory.exception.NotUniqueDepartment;
-import kg.itacademy.sewerfactory.mapper.DepartmentMapper;
 import kg.itacademy.sewerfactory.repository.DepartmentRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
+import kg.itacademy.sewerfactory.repository.SewerRepository;
 import kg.itacademy.sewerfactory.service.DepartmentService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -26,6 +27,7 @@ import java.util.stream.Collectors;
 public class DepartmentServiceImpl implements DepartmentService {
     final DepartmentRepository departmentRepository;
     final  OrderRepository orderRepository;
+    final SewerRepository sewerRepository;
     @Override
     public DepartmentResponse save(DepartmentRequest t) {
         try {
@@ -77,10 +79,19 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public Boolean updateDepartment(DepartmentUpdateRequest t){
         Department department = departmentRepository.getById(t.getId());
+        List<Sewer> sewers = sewerRepository.findAllSewersByDepartmentId(t.getId());
         Order order = null;
         if(t.getOrderId() != null && t.getOrderId() != 0){
             order = orderRepository.getById(t.getOrderId());
             order.setStatus(Status.INPROCESS);
+            int sewerCount = 0;
+            for (int i = 0; i < sewers.size(); i++) {
+                sewerCount++;
+            }
+            for (Sewer sewer: sewers){
+                sewer.setOrder(order);
+                sewer.setNeedAmount(order.getAmount() / sewerCount);
+            }
         }
         department.setOrder(order);
         if (t.getDepartmentName() != null){

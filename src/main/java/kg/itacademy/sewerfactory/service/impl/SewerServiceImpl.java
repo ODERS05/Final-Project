@@ -6,13 +6,11 @@ import kg.itacademy.sewerfactory.dto.sewer.request.SewerRequest;
 import kg.itacademy.sewerfactory.dto.sewer.request.SewerUpdateRequest;
 import kg.itacademy.sewerfactory.dto.sewer.response.SewerResponse;
 import kg.itacademy.sewerfactory.entity.Department;
-import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.entity.Sewer;
 import kg.itacademy.sewerfactory.entity.User;
 import kg.itacademy.sewerfactory.enums.Status;
 import kg.itacademy.sewerfactory.exception.*;
 import kg.itacademy.sewerfactory.repository.DepartmentRepository;
-import kg.itacademy.sewerfactory.repository.OrderRepository;
 import kg.itacademy.sewerfactory.repository.SewerRepository;
 import kg.itacademy.sewerfactory.repository.UserRepository;
 import kg.itacademy.sewerfactory.service.SewerService;
@@ -32,7 +30,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class SewerServiceImpl implements SewerService {
     final SewerRepository sewerRepository;
-    final OrderRepository orderRepository;
     final DepartmentRepository departmentRepository;
     final UserRepository userRepository;
 
