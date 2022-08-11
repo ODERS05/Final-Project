@@ -56,33 +56,9 @@ class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .authorizeRequests()
 
-                .antMatchers(HttpMethod.POST, "/users/*").permitAll()
-                .antMatchers(HttpMethod.GET, "/users/*").permitAll()
-                .antMatchers(HttpMethod.DELETE, "/users/*").permitAll()
-                .antMatchers(HttpMethod.PUT, "/users/*").permitAll()
-
-                .antMatchers(HttpMethod.GET,"/sewer/add-sewer").hasRole("SEWER")
-                .antMatchers(HttpMethod.GET, "/sewer/*").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/sewer").hasRole("ADMIN")
-                .antMatchers(HttpMethod.PUT, "/sewer/*").hasAnyRole("ADMIN", "SEWER")
-                .antMatchers(HttpMethod.DELETE, "/sewer/*").hasAnyRole("ADMIN", "SEWER")
-
-                .antMatchers(HttpMethod.POST, "/role").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/role").hasRole("ADMIN")
-                .antMatchers(HttpMethod.GET, "/role/*").hasRole("ADMIN")
-
-                .antMatchers(HttpMethod.GET, "/order/*").hasAnyRole("ADMIN", "CUSTOMER")
-                .antMatchers(HttpMethod.GET, "/order").hasAnyRole("ADMIN", "CUSTOMER")
-                .antMatchers(HttpMethod.PUT, "/order/*").hasAnyRole("ADMIN", "CUSTOMER")
-                .antMatchers(HttpMethod.DELETE, "/order/*").hasAnyRole("ADMIN","CUSTOMER")
-                .antMatchers(HttpMethod.POST, "/order/add-order").hasRole("CUSTOMER")
-
-                .antMatchers(HttpMethod.POST, "/customer/add-customer").hasAnyRole("ADMIN","CUSTOMER")
-                .antMatchers(HttpMethod.PUT, "/customer/*").hasAnyRole("ADMIN","CUSTOMER")
-                .antMatchers(HttpMethod.GET, "/customer").hasAnyRole("ADMIN","CUSTOMER")
-                .antMatchers(HttpMethod.GET, "/customer/*").hasAnyRole("ADMIN","CUSTOMER")
-                .antMatchers(HttpMethod.DELETE, "/customer/*").hasAnyRole("ADMIN","CUSTOMER")
-
+                .antMatchers(HttpMethod.POST, "/users/register").permitAll()
+                .antMatchers(HttpMethod.POST, "/users/auth").permitAll()
+                .antMatchers(HttpMethod.GET, "users/find-user").hasRole("ADMIN")
                 .and()
                 .httpBasic();
     }
