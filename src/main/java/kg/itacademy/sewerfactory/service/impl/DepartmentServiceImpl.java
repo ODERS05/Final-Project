@@ -92,6 +92,11 @@ public class DepartmentServiceImpl implements DepartmentService {
                 sewerRepository.save(sewer);
             }
         }
+        if (order == null){
+            for (Sewer sewer: sewers) {
+                sewer.setOrder(null);
+            }
+        }
         department.setOrder(order);
         if (t.getDepartmentName() != null){
             department.setDepartmentName(t.getDepartmentName());

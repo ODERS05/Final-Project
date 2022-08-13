@@ -1,14 +1,18 @@
 package kg.itacademy.sewerfactory.service.impl;
 
+import kg.itacademy.sewerfactory.dto.department.request.DepartmentUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderRequest;
 import kg.itacademy.sewerfactory.dto.order.request.OrderUpdateRequest;
 import kg.itacademy.sewerfactory.dto.order.response.OrderResponse;
 import kg.itacademy.sewerfactory.entity.Customer;
+import kg.itacademy.sewerfactory.entity.Department;
 import kg.itacademy.sewerfactory.entity.Order;
 import kg.itacademy.sewerfactory.enums.Status;
 import kg.itacademy.sewerfactory.exception.CustomerNotFoundException;
 import kg.itacademy.sewerfactory.repository.CustomerRepository;
+import kg.itacademy.sewerfactory.repository.DepartmentRepository;
 import kg.itacademy.sewerfactory.repository.OrderRepository;
+import kg.itacademy.sewerfactory.service.DepartmentService;
 import kg.itacademy.sewerfactory.service.OrderService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -27,6 +31,9 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
     final OrderRepository orderRepository;
     final CustomerRepository customerRepository;
+    final DepartmentService departmentService;
+    final DepartmentRepository departmentRepository;
+
     @Override
     public OrderResponse save(OrderRequest t) {
         Customer customer = customerRepository.findById(t.getCustomerId()).orElseThrow(() -> new CustomerNotFoundException("Такого заказчика нет", HttpStatus.BAD_REQUEST));
@@ -91,7 +98,9 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderResponse delete(Long id) {
         Order order = orderRepository.getById(id);
-        deleteAllOrdersByCustomerId(id);
+        Department department = departmentRepository.findDepartmentByOrderId(id);
+        departmentService.updateDepartment(DepartmentUpdateRequest.builder()
+                .id(department.getId()).build());
         orderRepository.delete(order);
         return OrderResponse.builder().build();
     }
@@ -142,7 +151,7 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.countByNewOrderIsTrue();
     }
 
-
+    @Override
     public void deleteAllOrdersByCustomerId(Long id) {
         List<Order> orders = orderRepository.findAllOrdersByCustomerId(id);
         for (Order order : orders) {

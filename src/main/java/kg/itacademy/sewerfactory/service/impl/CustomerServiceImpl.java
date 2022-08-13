@@ -93,6 +93,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public CustomerResponse delete(Long id) {
         Customer customer = customerRepository.getById(id);
+        orderService.deleteAllOrdersByCustomerId(id);
         customerRepository.delete(customer);
         return CustomerResponse.builder().build();
     }

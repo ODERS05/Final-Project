@@ -11,4 +11,7 @@ import java.util.List;
 public interface SewerRepository extends JpaRepository<Sewer, Long> {
     @Query(nativeQuery = true, value = "select s.* from sewer s where s.department_id = :id")
     List<Sewer>  findAllSewersByDepartmentId(Long id);
+
+    @Query(nativeQuery = true, value = "select s.* from sewer s where s.order_id = :id")
+    Sewer findSewerByOrderId(Long id);
 }

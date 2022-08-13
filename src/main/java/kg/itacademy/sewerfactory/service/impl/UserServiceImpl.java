@@ -50,7 +50,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse save(UserRequest t) {
         try {
-
             User user = userRepository.save(User.builder()
                     .email(t.getEmail())
                     .isActive(true)
@@ -60,7 +59,7 @@ public class UserServiceImpl implements UserService {
             UserRole userRole = new UserRole();
             userRole.setUser(userRepository.save(user));
             userRole.setId(user.getId());
-            if (t.getRole().equals(Roles.ROLE_CUSTOMER)) {
+            if (t.getRole().equals(Roles.ROLE_CUSTOMER)){
                 userRole.setRole(roleRepository.findById(1L).get());
             } else {
                 userRole.setRole(roleRepository.findById(2L).get());

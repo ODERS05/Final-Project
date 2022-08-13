@@ -10,4 +10,6 @@ public interface DepartmentRepository extends JpaRepository<Department, Long> {
     @Query(nativeQuery = true, value = "select d.* from department d where d.department_name = :findByDepartmentName")
     Department findByDepartmentName(String findByDepartmentName);
 
+    @Query(nativeQuery = true, value = "select d.* from department d where d.order_id = :id")
+    Department findDepartmentByOrderId(Long id);
 }

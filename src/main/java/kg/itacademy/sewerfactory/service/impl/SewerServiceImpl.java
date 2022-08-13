@@ -61,7 +61,7 @@ public class SewerServiceImpl implements SewerService {
     }
 
     @Override
-    public List<SewerResponse> getAll() throws NullPointerException{
+    public List<SewerResponse> getAll() throws NullPointerException {
         return sewerRepository.findAll().stream()
                 .map(sewer -> SewerResponse.builder()
                         .status(sewer.getStatus())
@@ -94,7 +94,7 @@ public class SewerServiceImpl implements SewerService {
     }
 
     @Override
-    public SewerResponse delete(Long id){
+    public SewerResponse delete(Long id) {
         Sewer sewer = sewerRepository.getById(id);
         sewerRepository.delete(sewer);
         return SewerResponse.builder().build();
@@ -104,25 +104,28 @@ public class SewerServiceImpl implements SewerService {
     public Boolean updateSewer(SewerUpdateRequest t) {
         Sewer sewer = sewerRepository.getById(t.getId());
         Department department = departmentRepository.findByDepartmentName(sewer.getDepartment().getDepartmentName());
-        if (t.getOrderId() != null && t.getOrderId() != 0){
-            if (department.getOrder() != null){
-                sewer.setOrder(department.getOrder());
+        if (department.getOrder() != null){
+            sewer.setOrder(department.getOrder());
+            if (sewer.getStatus() != Status.WAITING && sewer.getStatus() != Status.DONE){
                 sewer.setNeedAmount(t.getNeedAmount());
-                sewer.setStatus(Status.INPROCESS);
             }
+            sewer.setStatus(Status.INPROCESS);
         }
-        if (t.getStatus() != null){
+
+        if (t.getStatus() != null) {
             sewer.setStatus(t.getStatus());
         }
-        sewer.setDepartment(department);
-        if (t.getFio() != null){
+        if (t.getDepartmentName()!= null){
+            sewer.setDepartment(departmentRepository.findByDepartmentName(t.getDepartmentName()));
+        }
+        if (t.getFio() != null) {
             sewer.setFio(t.getFio());
         }
-        if (t.getPhoneNumber() != null){
+        if (t.getPhoneNumber() != null) {
             sewer.setPhoneNumber(t.getPhoneNumber());
         }
-        if (sewer.getOrder() != null){
-            if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > Objects.requireNonNull(department.getOrder()).getAmount()){
+        if (sewer.getOrder() != null) {
+            if (sewer.getNeedAmount() < 0 || sewer.getNeedAmount() > Objects.requireNonNull(department.getOrder()).getAmount()) {
                 throw new ImpossibleCaseException("Превышение указанного числа в заказе или отрицательное число", HttpStatus.BAD_REQUEST);
             }
         }
@@ -131,7 +134,7 @@ public class SewerServiceImpl implements SewerService {
     }
 
     @Override
-    public BigDecimal countSewerSalary(Long id){
+    public BigDecimal countSewerSalary(Long id) {
         Sewer sewer = sewerRepository.getById(id);
         if (sewer.getStatus().equals(Status.DONE)) {
             double sewerProfitPercentage = 0.25; // процент от стоимости получаемый швеёй

@@ -14,4 +14,5 @@ public interface OrderService extends BaseService<OrderResponse, OrderRequest> {
 
     Long returnNewOrdersCount();
 
+    void deleteAllOrdersByCustomerId(Long id);
 }
