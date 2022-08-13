@@ -99,9 +99,11 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse delete(Long id) {
         Order order = orderRepository.getById(id);
         Department department = departmentRepository.findDepartmentByOrderId(id);
-        departmentService.updateDepartment(DepartmentUpdateRequest.builder()
-                .id(department.getId())
-                .build());
+        if (department != null){
+            departmentService.updateDepartment(DepartmentUpdateRequest.builder()
+                    .id(department.getId())
+                    .build());
+        }
         orderRepository.delete(order);
         return OrderResponse.builder().build();
     }
