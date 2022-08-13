@@ -100,7 +100,8 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.getById(id);
         Department department = departmentRepository.findDepartmentByOrderId(id);
         departmentService.updateDepartment(DepartmentUpdateRequest.builder()
-                .id(department.getId()).build());
+                .id(department.getId())
+                .build());
         orderRepository.delete(order);
         return OrderResponse.builder().build();
     }

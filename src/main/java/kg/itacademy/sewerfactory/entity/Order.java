@@ -6,6 +6,8 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 import javax.swing.text.StyledEditorKit;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NegativeOrZero;
 import java.math.BigDecimal;
 
 @Entity
@@ -25,9 +27,11 @@ public class Order extends BaseEntity{
     @Column(name = "clothes_type", nullable = false)
     String clothesType;
 
+    @Min(0)
     @Column(name = "amount", nullable = false)
     Long amount;
 
+    @Min(0)
     @Column(name = "unit_price", nullable = false)
     Integer unitPrice;
 

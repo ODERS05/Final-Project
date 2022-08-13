@@ -111,7 +111,6 @@ public class SewerServiceImpl implements SewerService {
             }
             sewer.setStatus(Status.INPROCESS);
         }
-
         if (t.getStatus() != null) {
             sewer.setStatus(t.getStatus());
         }

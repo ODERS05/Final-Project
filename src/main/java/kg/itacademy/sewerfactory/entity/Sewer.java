@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 
 @Entity
@@ -46,6 +47,7 @@ public class Sewer{
     @Column(name = "phone_number", nullable = false, unique = true, length = 10)
     String phoneNumber;
 
+    @Min(0)
     @Column(name = "need_amount")
     Long needAmount;
 
